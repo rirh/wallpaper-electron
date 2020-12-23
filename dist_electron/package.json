@@ -17,6 +17,7 @@
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
     "vuex": "^4.0.0-0",
+    "wallpaper": "^4.4.2",
     "worker-plugin": "^5.0.0"
   },
   "devDependencies": {

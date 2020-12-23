@@ -1701,222 +1701,6 @@ eval("const assert = __webpack_require__(/*! assert */ \"assert\")\nconst path =
 
 /***/ }),
 
-/***/ "./node_modules/wallpaper/index.js":
-/*!*****************************************!*\
-  !*** ./node_modules/wallpaper/index.js ***!
-  \*****************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-eval("\n\nlet wallpaper;\nif (process.platform === 'darwin') {\n\twallpaper = __webpack_require__(/*! ./source/macos */ \"./node_modules/wallpaper/source/macos.js\");\n} else if (process.platform === 'win32') {\n\twallpaper = __webpack_require__(/*! ./source/win */ \"./node_modules/wallpaper/source/win.js\");\n} else {\n\twallpaper = __webpack_require__(/*! ./source/linux */ \"./node_modules/wallpaper/source/linux/index.js\");\n}\n\nmodule.exports = wallpaper;\n// TODO: remove this in the next major version\nmodule.exports.default = wallpaper;\n\n\n//# sourceURL=webpack:///./node_modules/wallpaper/index.js?");
-
-/***/ }),
-
-/***/ "./node_modules/wallpaper/source/linux/background-managers/cinnamon.js":
-/*!*****************************************************************************!*\
-  !*** ./node_modules/wallpaper/source/linux/background-managers/cinnamon.js ***!
-  \*****************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-eval("\nconst {commandExists, execFile, hasLine} = __webpack_require__(/*! ../util */ \"./node_modules/wallpaper/source/linux/util.js\");\n\nexports.isAvailable = async () => {\n\tif (!await commandExists('gsettings')) {\n\t\treturn false;\n\t}\n\n\ttry {\n\t\tconst {stdout} = await execFile('gsettings', ['list-schemas']);\n\t\treturn hasLine(stdout, 'org.cinnamon.desktop.background');\n\t} catch (_) {\n\t\treturn false;\n\t}\n};\n\nexports.set = async imagePath => {\n\tawait execFile('gsettings', [\n\t\t'set',\n\t\t'org.cinnamon.desktop.background',\n\t\t'picture-uri',\n\t\t`file://${imagePath}`\n\t]);\n};\n\nexports.get = async () => {\n\tconst {stdout} = await execFile('gsettings', [\n\t\t'get',\n\t\t'org.cinnamon.desktop.background',\n\t\t'picture-uri'\n\t]);\n\n\treturn stdout.trim().slice(8, -1);\n};\n\n\n//# sourceURL=webpack:///./node_modules/wallpaper/source/linux/background-managers/cinnamon.js?");
-
-/***/ }),
-
-/***/ "./node_modules/wallpaper/source/linux/background-managers/dconf.js":
-/*!**************************************************************************!*\
-  !*** ./node_modules/wallpaper/source/linux/background-managers/dconf.js ***!
-  \**************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-eval("\nconst {commandExists, execFile} = __webpack_require__(/*! ../util */ \"./node_modules/wallpaper/source/linux/util.js\");\n\nexports.isAvailable = () => commandExists('dconf');\n\nexports.set = async imagePath => {\n\tawait execFile('dconf', [\n\t\t'write',\n\t\t'/org/mate/desktop/background/picture-filename',\n\t\t`\"${imagePath}\"`\n\t]);\n};\n\nexports.get = async () => {\n\tconst {stdout} = await execFile('dconf', [\n\t\t'read',\n\t\t'/org/mate/desktop/background/picture-filename'\n\t]);\n\n\treturn stdout.trim().slice(1, -1);\n};\n\n\n//# sourceURL=webpack:///./node_modules/wallpaper/source/linux/background-managers/dconf.js?");
-
-/***/ }),
-
-/***/ "./node_modules/wallpaper/source/linux/background-managers/dcop.js":
-/*!*************************************************************************!*\
-  !*** ./node_modules/wallpaper/source/linux/background-managers/dcop.js ***!
-  \*************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-eval("\nconst {commandExists, execFile} = __webpack_require__(/*! ../util */ \"./node_modules/wallpaper/source/linux/util.js\");\n\nexports.isAvailable = () => commandExists('dcop');\n\nexports.set = async imagePath => {\n\tawait execFile('dcop', [\n\t\t'kdesktop',\n\t\t'KBackgroundIface',\n\t\t'setWallpaper',\n\t\t`${imagePath} 1`\n\t]);\n};\n\n\n//# sourceURL=webpack:///./node_modules/wallpaper/source/linux/background-managers/dcop.js?");
-
-/***/ }),
-
-/***/ "./node_modules/wallpaper/source/linux/background-managers/feh.js":
-/*!************************************************************************!*\
-  !*** ./node_modules/wallpaper/source/linux/background-managers/feh.js ***!
-  \************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-eval("\nconst {commandExists, execFile} = __webpack_require__(/*! ../util */ \"./node_modules/wallpaper/source/linux/util.js\");\n\nexports.isAvailable = () => commandExists('feh');\n\nexports.set = async imagePath => {\n\tawait execFile('feh', ['--bg-fill', imagePath]);\n};\n\n\n//# sourceURL=webpack:///./node_modules/wallpaper/source/linux/background-managers/feh.js?");
-
-/***/ }),
-
-/***/ "./node_modules/wallpaper/source/linux/background-managers/gconftool-2.js":
-/*!********************************************************************************!*\
-  !*** ./node_modules/wallpaper/source/linux/background-managers/gconftool-2.js ***!
-  \********************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-eval("\nconst {commandExists, execFile} = __webpack_require__(/*! ../util */ \"./node_modules/wallpaper/source/linux/util.js\");\n\nexports.isAvailable = () => commandExists('gconftool-2');\n\nexports.set = async imagePath => {\n\tawait execFile('gconftool-2', [\n\t\t'--set',\n\t\t'/desktop/gnome/background/picture_filename',\n\t\t'--type',\n\t\t'string',\n\t\timagePath\n\t]);\n};\n\n\n//# sourceURL=webpack:///./node_modules/wallpaper/source/linux/background-managers/gconftool-2.js?");
-
-/***/ }),
-
-/***/ "./node_modules/wallpaper/source/linux/background-managers/gnome.js":
-/*!**************************************************************************!*\
-  !*** ./node_modules/wallpaper/source/linux/background-managers/gnome.js ***!
-  \**************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-eval("\nconst {commandExists, execFile} = __webpack_require__(/*! ../util */ \"./node_modules/wallpaper/source/linux/util.js\");\n\nexports.isAvailable = () => commandExists('gsettings');\n\nexports.set = async imagePath => {\n\tawait execFile('gsettings', [\n\t\t'set',\n\t\t'org.gnome.desktop.background',\n\t\t'picture-uri',\n\t\t`file://${imagePath}`\n\t]);\n};\n\nexports.get = async () => {\n\tconst {stdout} = await execFile('gsettings', [\n\t\t'get',\n\t\t'org.gnome.desktop.background',\n\t\t'picture-uri'\n\t]);\n\n\treturn stdout.trim().slice(8, -1);\n};\n\n\n//# sourceURL=webpack:///./node_modules/wallpaper/source/linux/background-managers/gnome.js?");
-
-/***/ }),
-
-/***/ "./node_modules/wallpaper/source/linux/background-managers/index.js":
-/*!**************************************************************************!*\
-  !*** ./node_modules/wallpaper/source/linux/background-managers/index.js ***!
-  \**************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-eval("\n\nmodule.exports = {\n\tcinnamon: __webpack_require__(/*! ./cinnamon */ \"./node_modules/wallpaper/source/linux/background-managers/cinnamon.js\"),\n\tdconf: __webpack_require__(/*! ./dconf */ \"./node_modules/wallpaper/source/linux/background-managers/dconf.js\"),\n\tdcop: __webpack_require__(/*! ./dcop */ \"./node_modules/wallpaper/source/linux/background-managers/dcop.js\"),\n\tfeh: __webpack_require__(/*! ./feh */ \"./node_modules/wallpaper/source/linux/background-managers/feh.js\"),\n\tgconftool2: __webpack_require__(/*! ./gconftool-2 */ \"./node_modules/wallpaper/source/linux/background-managers/gconftool-2.js\"),\n\tgnome: __webpack_require__(/*! ./gnome */ \"./node_modules/wallpaper/source/linux/background-managers/gnome.js\"),\n\tmate: __webpack_require__(/*! ./mate */ \"./node_modules/wallpaper/source/linux/background-managers/mate.js\"),\n\tnitrogen: __webpack_require__(/*! ./nitrogen */ \"./node_modules/wallpaper/source/linux/background-managers/nitrogen.js\"),\n\tpcmanfm: __webpack_require__(/*! ./pcmanfm */ \"./node_modules/wallpaper/source/linux/background-managers/pcmanfm.js\"),\n\tqdbus: __webpack_require__(/*! ./qdbus */ \"./node_modules/wallpaper/source/linux/background-managers/qdbus.js\"),\n\tsetroot: __webpack_require__(/*! ./setroot */ \"./node_modules/wallpaper/source/linux/background-managers/setroot.js\"),\n\txfconfquery: __webpack_require__(/*! ./xfconf-query */ \"./node_modules/wallpaper/source/linux/background-managers/xfconf-query.js\")\n};\n\n\n//# sourceURL=webpack:///./node_modules/wallpaper/source/linux/background-managers/index.js?");
-
-/***/ }),
-
-/***/ "./node_modules/wallpaper/source/linux/background-managers/mate.js":
-/*!*************************************************************************!*\
-  !*** ./node_modules/wallpaper/source/linux/background-managers/mate.js ***!
-  \*************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-eval("\nconst {commandExists, execFile, hasLine} = __webpack_require__(/*! ../util */ \"./node_modules/wallpaper/source/linux/util.js\");\n\nexports.isAvailable = async () => {\n\tif (!await commandExists('gsettings')) {\n\t\treturn false;\n\t}\n\n\ttry {\n\t\tconst {stdout} = await execFile('gsettings', ['list-schemas']);\n\t\treturn hasLine(stdout, 'org.mate.background');\n\t} catch (_) {\n\t\treturn false;\n\t}\n};\n\nexports.set = async imagePath => {\n\tawait execFile('gsettings', [\n\t\t'set',\n\t\t'org.mate.background',\n\t\t'picture-filename',\n\t\timagePath\n\t]);\n};\n\nexports.get = async () => {\n\tconst {stdout} = await execFile('gsettings', [\n\t\t'get',\n\t\t'org.mate.background',\n\t\t'picture-filename'\n\t]);\n\n\treturn stdout.trim().slice(1, -1);\n};\n\n\n//# sourceURL=webpack:///./node_modules/wallpaper/source/linux/background-managers/mate.js?");
-
-/***/ }),
-
-/***/ "./node_modules/wallpaper/source/linux/background-managers/nitrogen.js":
-/*!*****************************************************************************!*\
-  !*** ./node_modules/wallpaper/source/linux/background-managers/nitrogen.js ***!
-  \*****************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-eval("\nconst path = __webpack_require__(/*! path */ \"path\");\nconst os = __webpack_require__(/*! os */ \"os\");\nconst {commandExists, execFile, readFile} = __webpack_require__(/*! ../util */ \"./node_modules/wallpaper/source/linux/util.js\");\n\nconst homeDir = os.homedir();\n\nexports.isAvailable = () => commandExists('nitrogen');\n\nexports.set = async imagePath => {\n\tawait execFile('nitrogen', [\n\t\t'--set-zoom-fill',\n\t\t'--save',\n\t\timagePath\n\t]);\n};\n\nexports.get = async () => {\n\tconst configFile = path.join(homeDir, '.config/nitrogen/bg-saved.cfg');\n\tconst config = await readFile(configFile, 'utf8');\n\n\treturn config.trim().split('\\n').find(line => line.startsWith('file=')).replace('file=', '');\n};\n\n\n//# sourceURL=webpack:///./node_modules/wallpaper/source/linux/background-managers/nitrogen.js?");
-
-/***/ }),
-
-/***/ "./node_modules/wallpaper/source/linux/background-managers/pcmanfm.js":
-/*!****************************************************************************!*\
-  !*** ./node_modules/wallpaper/source/linux/background-managers/pcmanfm.js ***!
-  \****************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-eval("\nconst {commandExists, execFile} = __webpack_require__(/*! ../util */ \"./node_modules/wallpaper/source/linux/util.js\");\n\nexports.isAvailable = () => commandExists('pcmanfm');\n\nexports.set = async imagePath => {\n\tawait execFile('pcmanfm', ['--set-wallpaper', imagePath]);\n};\n\n\n//# sourceURL=webpack:///./node_modules/wallpaper/source/linux/background-managers/pcmanfm.js?");
-
-/***/ }),
-
-/***/ "./node_modules/wallpaper/source/linux/background-managers/qdbus.js":
-/*!**************************************************************************!*\
-  !*** ./node_modules/wallpaper/source/linux/background-managers/qdbus.js ***!
-  \**************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-eval("\nconst {commandExists, execFile} = __webpack_require__(/*! ../util */ \"./node_modules/wallpaper/source/linux/util.js\");\n\nexports.isAvailable = () => commandExists('qdbus');\n\nexports.set = async imagePath => {\n\tawait execFile('qdbus', [\n\t\t'org.kde.plasmashell',\n\t\t'/PlasmaShell',\n\t\t'org.kde.PlasmaShell.evaluateScript',\n\t\t`\n\t\tvar allDesktops = desktops();\n\t\tfor (var i = 0; i < allDesktops.length; i++) {\n\t\t\tvar desktop = allDesktops[i];\n\t\t\tdesktop.wallpaperPlugin = 'org.kde.image';\n\t\t\tdesktop.currentConfigGroup = ['Wallpaper', 'org.kde.image', 'General'];\n\t\t\tdesktop.writeConfig('Image', 'file://${imagePath}');\n\t\t}\n\t\t`\n\t]);\n};\n\n\n//# sourceURL=webpack:///./node_modules/wallpaper/source/linux/background-managers/qdbus.js?");
-
-/***/ }),
-
-/***/ "./node_modules/wallpaper/source/linux/background-managers/setroot.js":
-/*!****************************************************************************!*\
-  !*** ./node_modules/wallpaper/source/linux/background-managers/setroot.js ***!
-  \****************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-eval("\nconst {commandExists, execFile} = __webpack_require__(/*! ../util */ \"./node_modules/wallpaper/source/linux/util.js\");\n\nexports.isAvailable = () => commandExists('setroot');\n\nexports.set = async imagePath => {\n\tawait execFile('setroot', [imagePath]);\n};\n\n\n//# sourceURL=webpack:///./node_modules/wallpaper/source/linux/background-managers/setroot.js?");
-
-/***/ }),
-
-/***/ "./node_modules/wallpaper/source/linux/background-managers/xfconf-query.js":
-/*!*********************************************************************************!*\
-  !*** ./node_modules/wallpaper/source/linux/background-managers/xfconf-query.js ***!
-  \*********************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-eval("\nconst {commandExists, execFile} = __webpack_require__(/*! ../util */ \"./node_modules/wallpaper/source/linux/util.js\");\n\nexports.isAvailable = () => commandExists('xfconf-query');\n\nexports.set = async imagePath => {\n\tawait execFile('xfconf-query', [\n\t\t'--channel',\n\t\t'xfce4-desktop',\n\t\t'--property',\n\t\t'/backdrop/screen0/monitor0/image-path',\n\t\t'--set',\n\t\t`${imagePath}`\n\t]);\n};\n\n\n//# sourceURL=webpack:///./node_modules/wallpaper/source/linux/background-managers/xfconf-query.js?");
-
-/***/ }),
-
-/***/ "./node_modules/wallpaper/source/linux/index.js":
-/*!******************************************************!*\
-  !*** ./node_modules/wallpaper/source/linux/index.js ***!
-  \******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-eval("\nconst path = __webpack_require__(/*! path */ \"path\");\nconst managers = __webpack_require__(/*! ./background-managers */ \"./node_modules/wallpaper/source/linux/background-managers/index.js\");\n\nlet availableApps;\n\nasync function setAvailableApps() {\n\tavailableApps = [];\n\n\tconst promises = Object.values(managers).map(async manager => {\n\t\tif (await manager.isAvailable()) {\n\t\t\tavailableApps.push(manager);\n\t\t}\n\t});\n\n\tawait Promise.all(promises);\n}\n\nexports.get = async () => {\n\tif (!availableApps) {\n\t\tawait setAvailableApps();\n\t\treturn exports.get();\n\t}\n\n\tconst wallpapersVoted = new Map();\n\tconst promises = availableApps.map(async app => {\n\t\tif (typeof app.get !== 'function') {\n\t\t\treturn;\n\t\t}\n\n\t\tconst imagePath = await app.get();\n\n\t\tif (typeof imagePath !== 'undefined') {\n\t\t\tif (!wallpapersVoted.get(imagePath)) {\n\t\t\t\twallpapersVoted.set(imagePath, 0);\n\t\t\t}\n\n\t\t\twallpapersVoted.set(imagePath, wallpapersVoted.get(imagePath) + 1);\n\t\t}\n\t});\n\n\tawait Promise.all(promises.map(promise => promise.catch(() => {})));\n\n\tlet wallpaperMostVoted;\n\tlet wallpaperMostVotedCount;\n\n\tfor (const [wallpaper] of wallpapersVoted) {\n\t\tif (!wallpaperMostVoted || wallpaperMostVoted[wallpaper] > wallpaperMostVotedCount) {\n\t\t\twallpaperMostVoted = wallpaper;\n\t\t\twallpaperMostVotedCount = wallpaperMostVoted[wallpaper];\n\t\t}\n\t}\n\n\treturn wallpaperMostVoted;\n};\n\nexports.set = async imagePath => {\n\tif (typeof imagePath !== 'string') {\n\t\tthrow new TypeError('Expected a string');\n\t}\n\n\tif (!availableApps) {\n\t\tawait setAvailableApps();\n\t\tawait exports.set(imagePath);\n\t\treturn;\n\t}\n\n\tconst promises = availableApps.map(async app => {\n\t\tif (typeof app.set === 'function') {\n\t\t\tawait app.set(path.resolve(imagePath));\n\t\t}\n\t});\n\n\tawait Promise.all(promises.map(promise => promise.catch(() => {})));\n};\n\n\n//# sourceURL=webpack:///./node_modules/wallpaper/source/linux/index.js?");
-
-/***/ }),
-
-/***/ "./node_modules/wallpaper/source/linux/util.js":
-/*!*****************************************************!*\
-  !*** ./node_modules/wallpaper/source/linux/util.js ***!
-  \*****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-eval("\nconst {promisify} = __webpack_require__(/*! util */ \"util\");\nconst childProcess = __webpack_require__(/*! child_process */ \"child_process\");\nconst fs = __webpack_require__(/*! fs */ \"fs\");\n\nconst execFile = promisify(childProcess.execFile);\n\nexports.commandExists = async cmd => {\n\t// `which` all commands and expect stdout to return a positive\n\ttry {\n\t\tlet {stdout} = await execFile('which', ['-a', cmd]);\n\t\tstdout = stdout.trim();\n\n\t\tif (!stdout) {\n\t\t\treturn false;\n\t\t}\n\n\t\treturn true;\n\t} catch (_) {\n\t\treturn false;\n\t}\n};\n\nexports.hasLine = (string, lineToFind) => string.split('\\n').find(line => line.trim() === lineToFind);\n\nexports.execFile = execFile;\nexports.exec = promisify(childProcess.exec);\nexports.readFile = promisify(fs.readFile);\n\n\n//# sourceURL=webpack:///./node_modules/wallpaper/source/linux/util.js?");
-
-/***/ }),
-
-/***/ "./node_modules/wallpaper/source/macos.js":
-/*!************************************************!*\
-  !*** ./node_modules/wallpaper/source/macos.js ***!
-  \************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-eval("\nconst {promisify} = __webpack_require__(/*! util */ \"util\");\nconst path = __webpack_require__(/*! path */ \"path\");\nconst childProcess = __webpack_require__(/*! child_process */ \"child_process\");\n\nconst execFile = promisify(childProcess.execFile);\n\n// Binary source → https://github.com/sindresorhus/macos-wallpaper\nconst binary = path.join(__dirname, 'macos-wallpaper');\n\nexports.get = async ({screen = 'main'} = {}) => {\n\tlet {stdout} = await execFile(binary, ['get', '--screen', screen]);\n\tstdout = stdout.trim();\n\n\tif (screen === 'all') {\n\t\treturn stdout.split('\\n');\n\t}\n\n\treturn stdout;\n};\n\nexports.set = async (imagePath, {screen = 'all', scale = 'auto'} = {}) => {\n\tif (typeof imagePath !== 'string') {\n\t\tthrow new TypeError('Expected a string');\n\t}\n\n\tconst arguments_ = [\n\t\t'set',\n\t\tpath.resolve(imagePath),\n\t\t'--screen',\n\t\tscreen,\n\t\t'--scale',\n\t\tscale\n\t];\n\n\tawait execFile(binary, arguments_);\n};\n\nexports.screens = async () => {\n\tconst {stdout} = await execFile(binary, ['screens']);\n\treturn stdout.trim().split('\\n').map(line => line.replace(/^\\d+ - /, ''));\n};\n\n\n//# sourceURL=webpack:///./node_modules/wallpaper/source/macos.js?");
-
-/***/ }),
-
-/***/ "./node_modules/wallpaper/source/win.js":
-/*!**********************************************!*\
-  !*** ./node_modules/wallpaper/source/win.js ***!
-  \**********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-eval("\nconst {promisify} = __webpack_require__(/*! util */ \"util\");\nconst path = __webpack_require__(/*! path */ \"path\");\nconst childProcess = __webpack_require__(/*! child_process */ \"child_process\");\n\nconst execFile = promisify(childProcess.execFile);\n\n// Binary source → https://github.com/sindresorhus/win-wallpaper\nconst binary = path.join(__dirname, 'win-wallpaper.exe');\n\nexports.get = async () => {\n\tconst {stdout} = await execFile(binary);\n\treturn stdout.trim();\n};\n\nexports.set = async imagePath => {\n\tif (typeof imagePath !== 'string') {\n\t\tthrow new TypeError('Expected a string');\n\t}\n\n\tawait execFile(binary, [path.resolve(imagePath)]);\n};\n\n\n//# sourceURL=webpack:///./node_modules/wallpaper/source/win.js?");
-
-/***/ }),
-
 /***/ "./node_modules/wrappy/wrappy.js":
 /*!***************************************!*\
   !*** ./node_modules/wrappy/wrappy.js ***!
@@ -1993,7 +1777,7 @@ eval("\nmodule.exports = Yallist\n\nYallist.Node = Node\nYallist.create = Yallis
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! electron */ \"electron\");\n/* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(electron__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var wallpaper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! wallpaper */ \"./node_modules/wallpaper/index.js\");\n/* harmony import */ var wallpaper__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(wallpaper__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! util */ \"util\");\n/* harmony import */ var util__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(util__WEBPACK_IMPORTED_MODULE_2__);\n\n\n\n\n// import path from \"path\";\nconst exec = util__WEBPACK_IMPORTED_MODULE_2___default.a.promisify(__webpack_require__(/*! child_process */ \"child_process\").exec);\nconst setWallpaper = (downloadloc, cb) => {\n  const osvar = process.platform;\n  //   downloadloc = path.resolve(downloadloc);\n  const command = `osascript -e 'tell application \"System Events\" to tell every desktop to set picture to \"${downloadloc}\"'`;\n  if (osvar === \"darwin\") {\n    // currently only macOS is supported.\n    exec(command, (err) => {\n      if (err) {\n        // node couldn't execute the command\n        console.log(err);\n        return;\n      }\n      if (cb) cb();\n    });\n  }\n};\n\nelectron__WEBPACK_IMPORTED_MODULE_0__[\"ipcMain\"].on(\"setwapper\", (_, path) => {\n//   setWallpaper(path, _.returnValue(\"done\"));\n  wallpaper__WEBPACK_IMPORTED_MODULE_1___default.a.set(path);\n});\n\n\n//# sourceURL=webpack:///./src/background.event.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! electron */ \"electron\");\n/* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(electron__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var wallpaper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! wallpaper */ \"wallpaper\");\n/* harmony import */ var wallpaper__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(wallpaper__WEBPACK_IMPORTED_MODULE_1__);\n\r\n\r\n\r\n// import util from \"util\";\r\n// import path from \"path\";\r\n// const exec = util.promisify(require(\"child_process\").exec);\r\n// const setWallpaper = (downloadloc, cb) => {\r\n//   const osvar = process.platform;\r\n//   //   downloadloc = path.resolve(downloadloc);\r\n//   const command = `osascript -e 'tell application \"System Events\" to tell every desktop to set picture to \"${downloadloc}\"'`;\r\n//   if (osvar === \"darwin\") {\r\n//     // currently only macOS is supported.\r\n//     exec(command, (err) => {\r\n//       if (err) {\r\n//         // node couldn't execute the command\r\n//         console.log(err);\r\n//         return;\r\n//       }\r\n//       if (cb) cb();\r\n//     });\r\n//   }\r\n// };\r\n\r\nelectron__WEBPACK_IMPORTED_MODULE_0__[\"ipcMain\"].on(\"setwapper\", (_, path) => {\r\n//   setWallpaper(path, _.returnValue(\"done\"));\r\n  wallpaper__WEBPACK_IMPORTED_MODULE_1___default.a.set(path);\r\n});\r\n\n\n//# sourceURL=webpack:///./src/background.event.js?");
 
 /***/ }),
 
@@ -2005,7 +1789,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var elec
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! electron */ \"electron\");\n/* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(electron__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var vue_cli_plugin_electron_builder_lib__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-cli-plugin-electron-builder/lib */ \"./node_modules/vue-cli-plugin-electron-builder/lib/index.js\");\n/* harmony import */ var electron_devtools_installer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! electron-devtools-installer */ \"./node_modules/electron-devtools-installer/dist/index.js\");\n/* harmony import */ var electron_devtools_installer__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(electron_devtools_installer__WEBPACK_IMPORTED_MODULE_2__);\n/* harmony import */ var _background_event_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./background.event.js */ \"./src/background.event.js\");\n\n\n\n\n\n\n\nconst isDevelopment = \"development\" !== \"production\";\n\n// Scheme must be registered before the app is ready\nelectron__WEBPACK_IMPORTED_MODULE_0__[\"protocol\"].registerSchemesAsPrivileged([\n  { scheme: \"app\", privileges: { secure: true, standard: true } },\n]);\n\nasync function createWindow() {\n  // Create the browser window.\n  const win = new electron__WEBPACK_IMPORTED_MODULE_0__[\"BrowserWindow\"]({\n    width: 800,\n    height: 600,\n    webPreferences: {\n      webSecurity: false,\n      // Use pluginOptions.nodeIntegration, leave this alone\n      // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info\n      nodeIntegration: true,\n      enableRemoteModule: true,\n      preload: __webpack_require__(/*! path */ \"path\").join(__dirname, \"preload.js\"),\n    },\n  });\n\n  if (true) {\n    // Load the url of the dev server if in development mode\n    await win.loadURL(\"http://localhost:8080/\");\n    if (!process.env.IS_TEST) win.webContents.openDevTools();\n  } else {}\n}\n\n// Quit when all windows are closed.\nelectron__WEBPACK_IMPORTED_MODULE_0__[\"app\"].on(\"window-all-closed\", () => {\n  // On macOS it is common for applications and their menu bar\n  // to stay active until the user quits explicitly with Cmd + Q\n  if (process.platform !== \"darwin\") {\n    electron__WEBPACK_IMPORTED_MODULE_0__[\"app\"].quit();\n  }\n});\n\nelectron__WEBPACK_IMPORTED_MODULE_0__[\"app\"].on(\"activate\", () => {\n  // On macOS it's common to re-create a window in the app when the\n  // dock icon is clicked and there are no other windows open.\n  if (electron__WEBPACK_IMPORTED_MODULE_0__[\"BrowserWindow\"].getAllWindows().length === 0) createWindow();\n});\n\n// This method will be called when Electron has finished\n// initialization and is ready to create browser windows.\n// Some APIs can only be used after this event occurs.\nelectron__WEBPACK_IMPORTED_MODULE_0__[\"app\"].on(\"ready\", async () => {\n  if (isDevelopment && !process.env.IS_TEST) {\n    // Install Vue Devtools\n    try {\n      await electron_devtools_installer__WEBPACK_IMPORTED_MODULE_2___default()(electron_devtools_installer__WEBPACK_IMPORTED_MODULE_2__[\"VUEJS_DEVTOOLS\"]);\n    } catch (e) {\n      console.error(\"Vue Devtools failed to install:\", e.toString());\n    }\n  }\n  createWindow();\n});\n\n// Exit cleanly on request from parent process in development mode.\nif (isDevelopment) {\n  if (process.platform === \"win32\") {\n    process.on(\"message\", (data) => {\n      if (data === \"graceful-exit\") {\n        electron__WEBPACK_IMPORTED_MODULE_0__[\"app\"].quit();\n      }\n    });\n  } else {\n    process.on(\"SIGTERM\", () => {\n      electron__WEBPACK_IMPORTED_MODULE_0__[\"app\"].quit();\n    });\n  }\n}\n\n\n//# sourceURL=webpack:///./src/background.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! electron */ \"electron\");\n/* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(electron__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var vue_cli_plugin_electron_builder_lib__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-cli-plugin-electron-builder/lib */ \"./node_modules/vue-cli-plugin-electron-builder/lib/index.js\");\n/* harmony import */ var electron_devtools_installer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! electron-devtools-installer */ \"./node_modules/electron-devtools-installer/dist/index.js\");\n/* harmony import */ var electron_devtools_installer__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(electron_devtools_installer__WEBPACK_IMPORTED_MODULE_2__);\n/* harmony import */ var _background_event_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./background.event.js */ \"./src/background.event.js\");\n\r\n\r\n\r\n\r\n\r\n\r\n\r\nconst isDevelopment = \"development\" !== \"production\";\r\n\r\n// Scheme must be registered before the app is ready\r\nelectron__WEBPACK_IMPORTED_MODULE_0__[\"protocol\"].registerSchemesAsPrivileged([\r\n  { scheme: \"app\", privileges: { secure: true, standard: true } },\r\n]);\r\n\r\nasync function createWindow() {\r\n  // Create the browser window.\r\n  const win = new electron__WEBPACK_IMPORTED_MODULE_0__[\"BrowserWindow\"]({\r\n    width: 800,\r\n    height: 600,\r\n    webPreferences: {\r\n      webSecurity: false,\r\n      // Use pluginOptions.nodeIntegration, leave this alone\r\n      // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info\r\n      nodeIntegration: true,\r\n      enableRemoteModule: true,\r\n      preload: __webpack_require__(/*! path */ \"path\").join(__dirname, \"preload.js\"),\r\n    },\r\n  });\r\n\r\n  if (true) {\r\n    // Load the url of the dev server if in development mode\r\n    await win.loadURL(\"http://localhost:8080/\");\r\n    if (!process.env.IS_TEST) win.webContents.openDevTools();\r\n  } else {}\r\n}\r\n\r\n// Quit when all windows are closed.\r\nelectron__WEBPACK_IMPORTED_MODULE_0__[\"app\"].on(\"window-all-closed\", () => {\r\n  // On macOS it is common for applications and their menu bar\r\n  // to stay active until the user quits explicitly with Cmd + Q\r\n  if (process.platform !== \"darwin\") {\r\n    electron__WEBPACK_IMPORTED_MODULE_0__[\"app\"].quit();\r\n  }\r\n});\r\n\r\nelectron__WEBPACK_IMPORTED_MODULE_0__[\"app\"].on(\"activate\", () => {\r\n  // On macOS it's common to re-create a window in the app when the\r\n  // dock icon is clicked and there are no other windows open.\r\n  if (electron__WEBPACK_IMPORTED_MODULE_0__[\"BrowserWindow\"].getAllWindows().length === 0) createWindow();\r\n});\r\n\r\n// This method will be called when Electron has finished\r\n// initialization and is ready to create browser windows.\r\n// Some APIs can only be used after this event occurs.\r\nelectron__WEBPACK_IMPORTED_MODULE_0__[\"app\"].on(\"ready\", async () => {\r\n  if (isDevelopment && !process.env.IS_TEST) {\r\n    // Install Vue Devtools\r\n    try {\r\n      await electron_devtools_installer__WEBPACK_IMPORTED_MODULE_2___default()(electron_devtools_installer__WEBPACK_IMPORTED_MODULE_2__[\"VUEJS_DEVTOOLS\"]);\r\n    } catch (e) {\r\n      console.error(\"Vue Devtools failed to install:\", e.toString());\r\n    }\r\n  }\r\n  createWindow();\r\n});\r\n\r\n// Exit cleanly on request from parent process in development mode.\r\nif (isDevelopment) {\r\n  if (process.platform === \"win32\") {\r\n    process.on(\"message\", (data) => {\r\n      if (data === \"graceful-exit\") {\r\n        electron__WEBPACK_IMPORTED_MODULE_0__[\"app\"].quit();\r\n      }\r\n    });\r\n  } else {\r\n    process.on(\"SIGTERM\", () => {\r\n      electron__WEBPACK_IMPORTED_MODULE_0__[\"app\"].quit();\r\n    });\r\n  }\r\n}\r\n\n\n//# sourceURL=webpack:///./src/background.js?");
 
 /***/ }),
 
@@ -2016,7 +1800,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var elec
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("module.exports = __webpack_require__(/*! /Users/zh/Documents/workspace/zorg/wallpaper-electron/src/background.js */\"./src/background.js\");\n\n\n//# sourceURL=webpack:///multi_./src/background.js?");
+eval("module.exports = __webpack_require__(/*! C:\\Users\\Administrator\\Desktop\\tools\\wallpaper-electron\\src\\background.js */\"./src/background.js\");\n\n\n//# sourceURL=webpack:///multi_./src/background.js?");
 
 /***/ }),
 
@@ -2039,17 +1823,6 @@ eval("module.exports = require(\"assert\");\n\n//# sourceURL=webpack:///external
 /***/ (function(module, exports) {
 
 eval("module.exports = require(\"buffer\");\n\n//# sourceURL=webpack:///external_%22buffer%22?");
-
-/***/ }),
-
-/***/ "child_process":
-/*!********************************!*\
-  !*** external "child_process" ***!
-  \********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("module.exports = require(\"child_process\");\n\n//# sourceURL=webpack:///external_%22child_process%22?");
 
 /***/ }),
 
@@ -2097,17 +1870,6 @@ eval("module.exports = require(\"https\");\n\n//# sourceURL=webpack:///external_
 
 /***/ }),
 
-/***/ "os":
-/*!*********************!*\
-  !*** external "os" ***!
-  \*********************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("module.exports = require(\"os\");\n\n//# sourceURL=webpack:///external_%22os%22?");
-
-/***/ }),
-
 /***/ "path":
 /*!***********************!*\
   !*** external "path" ***!
@@ -2149,6 +1911,17 @@ eval("module.exports = require(\"url\");\n\n//# sourceURL=webpack:///external_%2
 /***/ (function(module, exports) {
 
 eval("module.exports = require(\"util\");\n\n//# sourceURL=webpack:///external_%22util%22?");
+
+/***/ }),
+
+/***/ "wallpaper":
+/*!*****************************************!*\
+  !*** external "require(\"wallpaper\")" ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("module.exports = require(\"wallpaper\");\n\n//# sourceURL=webpack:///external_%22require(\\%22wallpaper\\%22)%22?");
 
 /***/ })
 
