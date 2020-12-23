@@ -1,18 +1,21 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <button @click="setWapper">setWapper</button>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
 export default {
-  name: 'Home',
-  components: {
-    HelloWorld
-  }
-}
+  name: "Home",
+  components: {},
+  methods: {
+    setWapper() {
+      window.ipcRenderer.send(
+        "setwapper",
+        "/Users/zh/Documents/images/pap.er/JsjXnWlh8-g.jpg"
+      );
+    },
+  },
+};
 </script>
