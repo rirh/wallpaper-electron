@@ -5,6 +5,7 @@
       class="image-item"
       v-for="{ path, id, category } in response.data"
       :key="id"
+      @click="handleSetWapper(path)"
     >
       <img ref="image" v-lazy="path" :alt="category" />
     </div>
@@ -88,6 +89,11 @@ export default {
   components: {},
   mounted() {
     this.fetchList();
+    window.ipcRenderer.on("reply-setpaper", (event, data) => {
+      console.log(data); //done
+    });
+    // console.log(window.os.homedir()    downloadImagePath: `${os.homedir()}${isWin() ? '\\Downloads\\wallpaper' : '/Downloads/wallpaper'} `,
+    // );
   },
   methods: {
     fetchList() {
@@ -103,6 +109,9 @@ export default {
           this.loading = false;
           console.error(err);
         });
+    },
+    handleSetWapper(path) {
+      window.ipcRenderer.send("setpaper", path);
     },
     setWapper() {
       const uri = `C:\\Users\\Administrator\\Desktop\\wallhaven-l3qmwq.jpg`;

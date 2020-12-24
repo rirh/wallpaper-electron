@@ -2,6 +2,8 @@
 import { ipcMain } from "electron";
 import wallpaper from "wallpaper";
 import util from "util";
+import { downloadPic } from "@/utils/file";
+
 // import path from "path";
 const exec = util.promisify(require("child_process").exec);
 const setWallpaper = (downloadloc, cb) => {
@@ -25,4 +27,12 @@ const setWallpaper = (downloadloc, cb) => {
 
 ipcMain.on("setwapper", (_, path) => {
   setWallpaper(path, _.returnValue("done"));
+});
+
+ipcMain.on("setpaper", (_, path) => {
+  downloadPic(path).then((loc) => {
+    setWallpaper(loc,()=>{
+      _.sender.send('reply-setpaper', 'done');
+    });
+  });
 });

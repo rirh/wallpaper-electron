@@ -7,4 +7,5 @@ document.addEventListener('DOMNodeInserted', () => {
   window.electron = electron;
   window.remote = remote;
   window.process = process;
+  window.os = require('os');
 })

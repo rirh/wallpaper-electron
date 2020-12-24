@@ -94,7 +94,7 @@
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! electron */ \"electron\");\n/* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(electron__WEBPACK_IMPORTED_MODULE_0__);\n\r\n\r\n\r\ndocument.addEventListener('DOMNodeInserted', () => {\r\n  window.ipcMain = electron__WEBPACK_IMPORTED_MODULE_0__[\"ipcMain\"];\r\n  window.ipcRenderer = electron__WEBPACK_IMPORTED_MODULE_0__[\"ipcRenderer\"];\r\n  window.electron = electron__WEBPACK_IMPORTED_MODULE_0___default.a;\r\n  window.remote = electron__WEBPACK_IMPORTED_MODULE_0__[\"remote\"];\r\n  window.process = process;\r\n})\n\n//# sourceURL=webpack:///./src/preload.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! electron */ \"electron\");\n/* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(electron__WEBPACK_IMPORTED_MODULE_0__);\n\r\n\r\n\r\ndocument.addEventListener('DOMNodeInserted', () => {\r\n  window.ipcMain = electron__WEBPACK_IMPORTED_MODULE_0__[\"ipcMain\"];\r\n  window.ipcRenderer = electron__WEBPACK_IMPORTED_MODULE_0__[\"ipcRenderer\"];\r\n  window.electron = electron__WEBPACK_IMPORTED_MODULE_0___default.a;\r\n  window.remote = electron__WEBPACK_IMPORTED_MODULE_0__[\"remote\"];\r\n  window.process = process;\r\n  window.os = __webpack_require__(/*! os */ \"os\");\r\n})\n\n//# sourceURL=webpack:///./src/preload.js?");
 
 /***/ }),
 
@@ -117,6 +117,17 @@ eval("module.exports = __webpack_require__(/*! /Users/zh/Documents/workspace/zor
 /***/ (function(module, exports) {
 
 eval("module.exports = require(\"electron\");\n\n//# sourceURL=webpack:///external_%22electron%22?");
+
+/***/ }),
+
+/***/ "os":
+/*!*********************!*\
+  !*** external "os" ***!
+  \*********************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("module.exports = require(\"os\");\n\n//# sourceURL=webpack:///external_%22os%22?");
 
 /***/ })
 
