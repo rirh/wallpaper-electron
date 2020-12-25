@@ -5,9 +5,11 @@
       class="image-item"
       v-for="{ path, id, category } in response.data"
       :key="id"
-      @click="handleSetWapper(path)"
     >
-      <img ref="image" v-lazy="path" :alt="category" />
+      <span class="setwapper" @click.stop="handleSetWapper(path)"
+        >设为桌面</span
+      >
+      <img ref="image" class="image" v-lazy="path" :alt="category" />
     </div>
     <!-- <button @click="setWapper">setWapper</button> -->
   </div>
@@ -77,8 +79,8 @@ export default {
         "#424153",
       ],
       filterParams: {
-        categories: "100",
-        purity: "100",
+        categories: 100,
+        purity: 100,
         page: 1,
       },
       currentImage: {},
@@ -133,5 +135,27 @@ export default {
 <style scoped>
 .image-item img {
   width: 100%;
+  /* cursor: pointer; */
+}
+.image-item {
+  position: relative;
+}
+.setwapper {
+  position: absolute;
+  top: 50%;
+  opacity: 0;
+  left: 50%;
+  transform: translate(-47px, -50%);
+  transition: all 200ms ease-in-out;
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 8px 20px;
+  border-radius: 20px;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.image-item:hover .setwapper {
+  opacity: 1;
 }
 </style>

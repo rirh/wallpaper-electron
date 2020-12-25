@@ -1,4 +1,5 @@
 # wallpaper-electron
+修改为wappler
 ```
 win
 set ELECTRON_MIRROR="https://npm.taobao.org/mirrors/electron/"

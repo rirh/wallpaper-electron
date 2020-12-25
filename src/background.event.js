@@ -14,16 +14,23 @@ const setWallpaper = (downloadloc, cb) => {
     // currently only macOS is supported.
     exec(command, (err) => {
       if (err) {
+        if (cb) cb(err);
         // node couldn't execute the command
         console.log(err);
         return;
       }
-      if (cb) cb();
+      if (cb) cb("done");
     });
   } else {
-    wallpaper.set(downloadloc).then(e=>{
-      if (cb) cb();
-    });
+    wallpaper
+      .set(downloadloc)
+      .then((_) => {
+        if (cb) cb(_);
+      })
+      .catch((error) => {
+        if (cb) cb(error);
+        throw error;
+      });
   }
 };
 
@@ -33,8 +40,9 @@ ipcMain.on("setwapper", (_, path) => {
 
 ipcMain.on("setpaper", (_, path) => {
   downloadPic(path).then((loc) => {
-    setWallpaper(loc,()=>{
-      _.sender.send('reply-setpaper', 'done');
+    setWallpaper(loc, (res) => {
+      console.log(res);
+      _.sender.send("reply-setpaper", "done");
     });
   });
 });

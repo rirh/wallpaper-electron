@@ -1,22 +1,26 @@
 "use strict";
 
-import { app, protocol, BrowserWindow } from "electron";
+import { app, protocol, BrowserWindow, Tray, screen } from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
+import path from "path";
 import "./background.event.js";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
-
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
   { scheme: "app", privileges: { secure: true, standard: true } },
 ]);
-
+let win;
 async function createWindow() {
   // Create the browser window.
-  const win = new BrowserWindow({
+  win = new BrowserWindow({
     width: 282,
     height: 600,
+    y: 0,
+    x: screen.getCursorScreenPoint().x - 282 / 2 + 60,
+    transparent: true,
+    frame: false,
     webPreferences: {
       webSecurity: false,
       // Use pluginOptions.nodeIntegration, leave this alone
@@ -57,6 +61,9 @@ app.on("activate", () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on("ready", async () => {
+  const iconPath = path.join(__dirname, "../src/assets/iconTemplate.png");
+  const trayIcon = new Tray(iconPath);
+  trayIcon.setToolTip(`${app.getName()}`);
   if (isDevelopment && !process.env.IS_TEST) {
     // Install Vue Devtools
     try {
