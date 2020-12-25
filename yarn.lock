@@ -9844,6 +9844,11 @@ wcwidth@^1.0.1:
   dependencies:
     defaults "^1.0.3"
 
+webp-converter@^2.3.1:
+  version "2.3.1"
+  resolved "https://registry.npm.taobao.org/webp-converter/download/webp-converter-2.3.1.tgz#394bbe0014634a46821c78bf126156e76a5e5b62"
+  integrity sha1-OUu+ABRjSkaCHHi/EmFW52peW2I=
+
 webpack-bundle-analyzer@^3.8.0:
   version "3.9.0"
   resolved "https://registry.npm.taobao.org/webpack-bundle-analyzer/download/webpack-bundle-analyzer-3.9.0.tgz?cache=0&sync_timestamp=1608133931699&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fwebpack-bundle-analyzer%2Fdownload%2Fwebpack-bundle-analyzer-3.9.0.tgz#f6f94db108fb574e415ad313de41a2707d33ef3c"

@@ -21,7 +21,9 @@ const setWallpaper = (downloadloc, cb) => {
       if (cb) cb();
     });
   } else {
-    wallpaper.set(downloadloc);
+    wallpaper.set(downloadloc).then(e=>{
+      if (cb) cb();
+    });
   }
 };
 
