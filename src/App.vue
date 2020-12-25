@@ -1,16 +1,24 @@
 <template>
   <div class="app-main">
-    <div class="box"></div>
-
+    <div class="box" v-if="ismac"></div>
     <div class="contant">
-      <div class="header">
+      <div class="header" :class="{ drag: !ismac }">
         <div class="bg"></div>
       </div>
-
       <router-view />
     </div>
   </div>
 </template>
+<script>
+export default {
+  computed: {
+    ismac() {
+      return window.process.platform === "darwin";
+    },
+  },
+};
+</script>
+
 
 <style scoped>
 .app-main {

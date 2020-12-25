@@ -16,3 +16,9 @@ body {
     text-align: center;
     color: #2c3e50;
   }
+  .drag{
+    -webkit-app-region:drag;
+  }  
+  .no-drag{
+    -webkit-app-region:no-drag;
+  }

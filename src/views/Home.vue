@@ -81,7 +81,7 @@ export default {
       filterParams: {
         categories: 100,
         purity: 100,
-        page: 1,
+        page: 2,
       },
       currentImage: {},
       lastListQueryParams: {},
