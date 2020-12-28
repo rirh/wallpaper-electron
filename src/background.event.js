@@ -34,15 +34,14 @@ const setWallpaper = (downloadloc, cb) => {
   }
 };
 
-ipcMain.on("setwapper", (_, path) => {
-  setWallpaper(path, _.returnValue("done"));
+ipcMain.on("setwapper", (_, { path, i }) => {
+  setWallpaper(path, _.returnValue(`done${i}`));
 });
 
-ipcMain.on("setpaper", (_, path) => {
+ipcMain.on("setpaper", (_, { path, i }) => {
   downloadPic(path).then((loc) => {
-    setWallpaper(loc, (res) => {
-      console.log(res);
-      _.sender.send("reply-setpaper", "done");
+    setWallpaper(loc, () => {
+      _.sender.send("reply-setpaper", { state: "done", i });
     });
   });
 });

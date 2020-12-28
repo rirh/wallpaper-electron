@@ -1,9 +1,10 @@
 <template>
   <div class="app-main">
     <div class="box" v-if="ismac"></div>
-    <div class="contant">
+    <div class="contant" v-infinite-scroll="load">
       <div class="header" :class="{ drag: !ismac }">
         <div class="bg"></div>
+        <i class="setting el-icon-setting"></i>
       </div>
       <router-view />
     </div>
@@ -16,9 +17,13 @@ export default {
       return window.process.platform === "darwin";
     },
   },
+  methods: {
+    load() {
+      console.log(2);
+    },
+  },
 };
 </script>
-
 
 <style scoped>
 .app-main {
@@ -31,11 +36,11 @@ export default {
 .box::before {
   content: "";
   position: absolute;
-  left: calc(50% - 11px);
-  top: -10px;
+  left: calc(50% - 16px);
+  top: -16px;
   width: 0px;
   height: 0px;
-  border: 11px solid transparent;
+  border: 16px solid transparent;
   border-bottom: 16px solid black;
   z-index: -1;
 }
@@ -56,11 +61,24 @@ export default {
   /* background-color: black; */
   color: rgba(255, 255, 255, 1);
   width: 93%;
-  background-image: url("./assets/paper.png");
+  background-image: url("./assets/wall.paper.png");
   background-size: cover;
   background-repeat: no-repeat;
   height: 40px;
-  background-position: 40% -10%;
+  background-position: 40% 0%;
   z-index: 1;
+  border-bottom: 1px solid #000;
+}
+.setting {
+  position: absolute;
+  right: 15px;
+  top: 20px;
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 200ms ease-in-out;
+}
+.setting:hover {
+  color: rgba(255, 255, 255, 0.7);
 }
 </style>

@@ -13,6 +13,9 @@ protocol.registerSchemesAsPrivileged([
 ]);
 let win;
 async function createWindow() {
+  const iconPath = path.join(__dirname, "../src/assets/iconTemplate.png");
+  const trayIcon = new Tray(iconPath);
+  trayIcon.setToolTip(`${app.getName()}`);
   // Create the browser window.
   win = new BrowserWindow({
     width: 282,
@@ -30,7 +33,54 @@ async function createWindow() {
       preload: require("path").join(__dirname, "preload.js"),
     },
   });
+  // 检测是否MacOS darwin
+  if (process.platform === "darwin" || trayIcon) {
+    // 点击时显示窗口，并修改窗口的显示位置
+    trayIcon.on("click", () => {
+      const { width, height } = screen.getPrimaryDisplay().workAreaSize;
+      const [defaultWidth, defaultHeight] = [width, height].map((x) =>
+        Math.round((x * 3) / 4)
+      );
+      const WINDOW_WIDTH = defaultWidth - 250;
+      const WINDOW_HEIGHT = defaultHeight;
+      const HORIZ_PADDING = 15;
+      const VERT_PADDING = 15;
 
+      const cursorPosition = screen.getCursorScreenPoint();
+      const primarySize = screen.getPrimaryDisplay().workAreaSize;
+      const trayPositionVert =
+        cursorPosition.y >= primarySize.height / 2 ? "bottom" : "top";
+      const trayPositionHoriz =
+        cursorPosition.x >= primarySize.width / 2 ? "right" : "left";
+
+      win.setPosition(getTrayPosX(), getTrayPosY());
+      if (win.isVisible()) {
+        win.hide();
+      } else {
+        win.show();
+      }
+      // 计算位置
+      function getTrayPosX() {
+        const horizBounds = {
+          left: cursorPosition.x - WINDOW_WIDTH / 2,
+          right: cursorPosition.x + WINDOW_WIDTH / 2,
+        };
+        if (trayPositionHoriz === "left") {
+          return horizBounds.left <= HORIZ_PADDING
+            ? HORIZ_PADDING
+            : horizBounds.left;
+        }
+        return horizBounds.right >= primarySize.width
+          ? primarySize.width - HORIZ_PADDING - WINDOW_WIDTH
+          : horizBounds.right - WINDOW_WIDTH;
+      }
+      function getTrayPosY() {
+        return trayPositionVert === "bottom"
+          ? cursorPosition.y - WINDOW_HEIGHT - VERT_PADDING
+          : cursorPosition.y + VERT_PADDING;
+      }
+    });
+  }
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
@@ -61,9 +111,6 @@ app.on("activate", () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on("ready", async () => {
-  const iconPath = path.join(__dirname, "../src/assets/iconTemplate.png");
-  const trayIcon = new Tray(iconPath);
-  trayIcon.setToolTip(`${app.getName()}`);
   if (isDevelopment && !process.env.IS_TEST) {
     // Install Vue Devtools
     try {
