@@ -15,7 +15,11 @@ module.exports = {
       preload: 'src/preload.js',
       builderOptions: {
         productName: 'wall.paper',
-        appId: 'com.pa.per',
+        appId: 'com.wall.paper',
+        publisg:[{
+          provider:"generic",
+          url:''
+        }],
         dmg: {
             contents: [
                 {

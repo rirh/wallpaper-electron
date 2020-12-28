@@ -47,7 +47,9 @@ export const downloadPic = async function(src, cb) {
     const fileName = src;
     mkdirSync(hostdir);
     const splita = fileName.split("/");
-    let dstpath = `${hostdir}/${splita[splita.length - 1]}`;
+    let dstpath = `${hostdir}/${splita[splita.length - 1]
+      .split("wallhaven")
+      .join("wallpaper")}`;
     let isWebp = false;
     // 如图图片已经下载完成了
     if (fs.existsSync(`${dstpath}`)) {
@@ -70,12 +72,12 @@ export const downloadPic = async function(src, cb) {
     myRequest.on("response", (data) => {
       // 更新总文件字节大小
       totalBytes = parseInt(data.headers["content-length"], 10);
+      cb({ total: totalBytes });
     });
     myRequest.on("data", (chunk) => {
       // 更新下载的文件块字节大小
       receivedBytes += chunk.length;
-      // console.log(receivedBytes, totalBytes)
-      if (cb) cb();
+      if (cb) cb({ current: receivedBytes });
     });
 
     myRequest.on("error", () => {

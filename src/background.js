@@ -13,7 +13,7 @@ protocol.registerSchemesAsPrivileged([
 ]);
 let win;
 async function createWindow() {
-  const iconPath = path.join(__dirname, "../src/assets/iconTemplate.png");
+  const iconPath = path.join(__dirname, "../src/assets/iconTemplate@2x.png");
   const trayIcon = new Tray(iconPath);
   trayIcon.setToolTip(`${app.getName()}`);
   // Create the browser window.
@@ -24,6 +24,7 @@ async function createWindow() {
     x: screen.getCursorScreenPoint().x - 282 / 2 + 60,
     transparent: true,
     frame: false,
+    show: false,
     webPreferences: {
       webSecurity: false,
       // Use pluginOptions.nodeIntegration, leave this alone
@@ -41,7 +42,7 @@ async function createWindow() {
       const [defaultWidth, defaultHeight] = [width, height].map((x) =>
         Math.round((x * 3) / 4)
       );
-      const WINDOW_WIDTH = defaultWidth - 250;
+      const WINDOW_WIDTH = defaultWidth - 500;
       const WINDOW_HEIGHT = defaultHeight;
       const HORIZ_PADDING = 15;
       const VERT_PADDING = 15;
@@ -112,6 +113,8 @@ app.on("activate", () => {
 // Some APIs can only be used after this event occurs.
 app.on("ready", async () => {
   if (isDevelopment && !process.env.IS_TEST) {
+    // 设置开机自动启动
+    app.setLoginItemSettings({ openAtLogin: true });
     // Install Vue Devtools
     try {
       await installExtension(VUEJS_DEVTOOLS);
@@ -120,6 +123,9 @@ app.on("ready", async () => {
     }
   }
   createWindow();
+});
+app.on("browser-window-blur", async () => {
+  // app.hide();
 });
 
 // Exit cleanly on request from parent process in development mode.

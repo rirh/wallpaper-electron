@@ -1,5 +1,5 @@
 {
-  "name": "wallpaper-electron",
+  "name": "wall.paper",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -14,10 +14,12 @@
   "main": "background.js",
   "dependencies": {
     "core-js": "^3.6.5",
+    "electron-updater": "^4.3.5",
     "element-plus": "^1.0.1-beta.17",
     "menubar": "^9.0.1",
     "nprogress": "^0.2.0",
     "vue": "^3.0.0",
+    "vue-infinite-scroll": "^2.0.2",
     "vue-router": "^4.0.0-0",
     "vue3-lazyload": "^0.2.2-beta",
     "vuex": "^4.0.0-0",

@@ -1,16 +1,16 @@
 <template>
   <ul
     class="home"
+    @scroll="handleScroll"
     v-infinite-scroll="load"
     :infinite-scroll-distance="100"
-    @scroll="handleScroll"
   >
     <li class="empty">
       &nbsp;
     </li>
     <li
       class="image-item"
-      v-for="({ path, id, category, thumbs, loading }, i) in lists"
+      v-for="({ id, path, category, thumbs, loading }, i) in lists"
       :key="id"
     >
       <span class="setwapper" @click.stop="handleSetWapper(loading, path, i)">
@@ -34,8 +34,8 @@
         />
       </el-avatar>
     </li>
-    <li v-show="loading" class="empty-tips">稍等一会，美好的事情即将发生...</li>
-    <li>
+    <li class="empty-tips">稍等一会，美好的事情即将发生...</li>
+    <li v-show="undowloading">
       <i
         @click="handleReload"
         :class="[
@@ -44,12 +44,30 @@
         ]"
       ></i>
     </li>
+    <li class="download" v-show="!undowloading">
+      <div class="contarl">
+        <div>
+          <span><i class="el-icon-refresh"></i><span>重新下载</span></span>
+          <span @click="handleCanelDowload"
+            ><i class="el-icon-close"></i><span>取消下载</span></span
+          >
+        </div>
+      </div>
+      <div v-show="current > 0" class="load-bar">
+        <span style="margin-right:10px">{{ current }}M/{{ total }}M</span>
+      </div>
+      <div
+        :class="[current > 0 ? 'active-pro' : '', 'pro']"
+        :style="{ width: `${(current / total) * 100}%` }"
+      ></div>
+    </li>
     <!-- <button @click="setWapper">setWapper</button> -->
   </ul>
 </template>
 
 <script>
 const categories = [
+  "last",
   "people",
   "top",
   "card",
@@ -60,6 +78,14 @@ const categories = [
   "lake",
   "girl",
   "boy",
+  "new",
+  "why",
+  "beauty",
+  "weekday",
+  "new year",
+  "sun",
+  "shine",
+  new Date().getFullYear(),
 ];
 // @ is an alias to /src
 export default {
@@ -68,6 +94,10 @@ export default {
     return {
       setting: false,
       loading: false,
+      undowloading: true,
+      total: "0",
+      current: "0",
+      currentImageIndex: 0,
       url: "https://f794c6c4-6af8-4d74-b405-d93ed7968c0f.bspapp.com/http/wall?",
       filterParams: {
         categories: 100,
@@ -85,68 +115,93 @@ export default {
       const { i } = data;
       this.lists[i] = { ...this.lists[i], loading: false };
     });
+    window.ipcRenderer.on("reply-pro", (event, data) => {
+      const { total, current } = data;
+      if (total) this.total = (total / 1024 / 1000).toFixed(2);
+      if (current) this.current = (current / 1024 / 1000).toFixed(2);
+      this.undowloading = this.total === this.current;
+    });
   },
   methods: {
     handleScroll(e) {
+      console.log(e.target.scrollTop);
       console.log(e);
     },
     errorHandler() {
       return true;
     },
     handleReload() {
+      if (this.loading) return;
       this.filterParams = {
         page: 1,
         q: categories[parseInt(Math.random() * categories.length - 1, 10) + 1],
       };
       this.fetchList();
+      window.ipcRenderer.send("checkForUpdate");
     },
     fetchList() {
       this.loading = true;
       // fetch(`${this.baseUri}${this.object2URL(this.filterParams)}`, {
-      fetch(`${this.url}`, {
-        method: "POST",
-        body: JSON.stringify({
-          options: {
-            method: "get",
-            data: this.filterParams,
-            dataType: "json",
-          },
-        }),
-      })
-        .then(async (response) => {
-          console.log(response);
-          this.response = await response.json();
-          const lists = this.response.data.data.map((e) => ({
-            ...e,
-            loading: false,
-          }));
-          if (this.filterParams.page === 1) {
-            this.lists = lists;
-          } else {
-            this.lists = [...this.lists, ...lists];
-          }
-          this.loading = false;
+      try {
+        fetch(`${this.url}`, {
+          method: "POST",
+          body: JSON.stringify({
+            options: {
+              method: "get",
+              data: this.filterParams,
+              dataType: "json",
+            },
+          }),
         })
-        .catch((err) => {
-          this.loading = false;
-          console.error(err);
-        });
+          .then(async (response) => {
+            this.response = await response.json();
+            if (!this.response.data) return;
+            const lists = this.response.data.data.map((e) => ({
+              ...e,
+              loading: false,
+            }));
+            if (this.filterParams.page === 1) {
+              this.lists = lists;
+            } else {
+              this.lists = [...this.lists, ...lists];
+            }
+            this.loading = false;
+            this.$nextTick(() => {
+              document.querySelector(".empty").scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+              });
+            });
+          })
+          .catch((err) => {
+            this.loading = false;
+            console.error(err);
+          });
+      } catch (error) {
+        this.loading = false;
+      }
     },
     handleSetWapper(loading, path, i) {
       if (loading) return;
+      this.undowloading = false;
+      this.currentImageIndex = i;
       this.lists[i] = { ...this.lists[i], loading: true };
       window.ipcRenderer.send("setpaper", { path, i });
+    },
+    handleCanelDowload() {
+      window.ipcRenderer.send("sendCanelDowload");
+      this.undowloading = true;
+      this.total = null;
+      this.current = null;
+      this.lists[this.currentImageIndex] = {
+        ...this.lists[this.currentImageIndex],
+        loading: false,
+      };
     },
     load() {
       console.log(1);
       this.filterParams.page = this.filterParams.page + 1;
       this.fetchList();
-    },
-    setWapper() {
-      const uri = `C:\\Users\\Administrator\\Desktop\\wallhaven-l3qmwq.jpg`;
-      // const uri = '/Users/zh/Documents/images/pap.er/JsjXnWlh8-g.jpg'
-
-      window.ipcRenderer.send("setwapper", uri);
     },
     object2URL(obj) {
       var str = [];
@@ -172,6 +227,9 @@ ul li {
 .home {
   height: calc(100vh - 12px);
   overflow-y: auto;
+  box-sizing: border-box;
+  width: 100vw;
+  overflow-x: hidden;
 }
 .empty {
   height: 60px;
@@ -191,8 +249,9 @@ ul li {
   position: relative;
 }
 .empty-tips {
-  font-size: 16px;
+  font-size: 14px;
   color: #999;
+  padding: 20px 0px;
 }
 .setwapper {
   position: absolute;
@@ -244,5 +303,49 @@ ul li {
 .re-fresh:hover {
   color: #fff;
   background-color: rgba(0, 0, 0, 0.6);
+}
+.download {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  background-color: rgba(0, 0, 0, 0.8);
+  width: 100%;
+  color: #eee;
+  padding: 15px 0 20px;
+  text-align: left;
+  font-size: 12px;
+  cursor: pointer;
+}
+.download i {
+  margin: 0 12px;
+  font-size: 16px;
+}
+.contarl {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.pro {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+  /* height: 0px; */
+  height: 5px;
+  background-color: #000;
+}
+.load-bar {
+  position: fixed;
+  bottom: 7px;
+  left: 0;
+  z-index: 2;
+  text-align: right;
+  width: 100%;
+  font-size: 10px;
+  /* height: 0px; */
+}
+.active-pro {
+  background-color: #409eff;
 }
 </style>

@@ -1,10 +1,10 @@
 <template>
   <div class="app-main">
     <div class="box" v-if="ismac"></div>
-    <div class="contant" v-infinite-scroll="load">
+    <div class="contant">
       <div class="header" :class="{ drag: !ismac }">
         <div class="bg"></div>
-        <i class="setting el-icon-setting"></i>
+        <i @click="handleOpenSettingPage" class="setting el-icon-setting"></i>
       </div>
       <router-view />
     </div>
@@ -18,8 +18,8 @@ export default {
     },
   },
   methods: {
-    load() {
-      console.log(2);
+    handleOpenSettingPage() {
+      window.ipcRenderer.send("opensettingpage");
     },
   },
 };
@@ -46,6 +46,7 @@ export default {
 }
 .contant {
   height: calc(100vh - 12px);
+  width: 100vw;
   overflow-y: scroll;
   overflow-x: hidden;
   border-radius: 10px;
