@@ -1,12 +1,29 @@
 "use strict";
 import path from "path";
-import { app, Tray, Menu, screen, BrowserWindow } from "electron";
+import { app, Tray, Menu, BrowserWindow } from "electron";
 let tray = null;
 export default function() {
   // eslint-disable-next-line no-undef
   const iconPath = path.join(__static, "38x38@2x.png");
   tray = new Tray(iconPath);
   tray.setToolTip(`${app.getName()}`);
+  const getWindowPosition = () => {
+    const [win] = BrowserWindow.getAllWindows();
+    const windowBounds = win.getBounds();
+    const trayBounds = tray.getBounds();
+    const x = Math.round(
+      trayBounds.x + trayBounds.width / 2 - windowBounds.width / 2
+    );
+    const y = Math.round(trayBounds.y + trayBounds.height);
+    return { x, y };
+  };
+  const [win] = BrowserWindow.getAllWindows();
+  const position = getWindowPosition();
+  win.setPosition(position.x, position.y, false);
+  win.show();
+  win.setVisibleOnAllWorkspaces(true);
+  win.focus();
+  win.setVisibleOnAllWorkspaces(false);
   if (process.platform !== "darwin") {
     const contextMenu = Menu.buildFromTemplate([
       {
@@ -28,9 +45,9 @@ export default function() {
     ]);
     tray.setContextMenu(contextMenu);
   }
-  tray.on("click", () => {
+  tray.on("click", e => {
+    e.preventDefault();
     const [win] = BrowserWindow.getAllWindows();
-    win.setPosition(screen.getCursorScreenPoint().x - 282 / 2, 10);
     if (win.isVisible()) {
       win.hide();
     } else {

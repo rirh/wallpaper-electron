@@ -23,7 +23,8 @@ async function createWindow() {
     x: screen.getCursorScreenPoint().x - 282 / 2 + 60,
     transparent: true,
     frame: false,
-    show: true,
+    show: false,
+    fullscreenable: false,
     resizable: false,
     /* global __static */
     icon: path.join(__static, "icon.png"),
@@ -33,7 +34,8 @@ async function createWindow() {
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
       enableRemoteModule: true,
-      preload: require("path").join(__dirname, "preload.js")
+      preload: require("path").join(__dirname, "preload.js"),
+      devTools: isDevelopment
     }
   });
   if (process.env.WEBPACK_DEV_SERVER_URL) {
@@ -64,7 +66,6 @@ app.on("activate", () => {
 
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-  if (BrowserWindow.getAllWindows().length === 0) createWindow();
   console.log(win);
 });
 
@@ -80,8 +81,21 @@ app.on("ready", async () => {
   //   console.error("Vue Devtools failed to install:", e.toString());
   // }
   // }
-  createTray();
   createWindow();
+  createTray();
+  const appFolder = path.dirname(process.execPath);
+  const updateExe = path.resolve(appFolder, "..", "Update.exe");
+  const exeName = path.basename(process.execPath);
+  app.setLoginItemSettings({
+    openAtLogin: true,
+    path: updateExe,
+    args: [
+      "--processStart",
+      `"${exeName}"`,
+      "--process-start-args",
+      `"--hidden"`
+    ]
+  });
 });
 
 // Exit cleanly on request from parent process in development mode.

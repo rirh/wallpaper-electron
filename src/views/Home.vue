@@ -37,6 +37,7 @@
           're-fresh',
           loading ? 'el-icon-loading' : 'el-icon-refresh-right'
         ]"
+        :style="{ bottom: platform === 'darwin' ? '13px' : '4vh' }"
       ></i>
     </li>
     <li class="download" v-show="!undowloading">
@@ -46,7 +47,9 @@
         ><span @click="handleCanelDowload">取消下载</span>
       </div>
       <div v-show="current > 0" class="load-bar">
-        <span style="margin-right:10px">{{ current }}M/{{ total }}M</span>
+        <span style="margin-right:10px"
+          >{{ current }}M&nbsp;/&nbsp;{{ total }}M</span
+        >
       </div>
       <div
         :class="[current > 0 ? 'active-pro' : '', 'pro']"
@@ -80,10 +83,12 @@ const categories = [
   new Date().getFullYear()
 ];
 // @ is an alias to /src
+
 export default {
   name: "Home",
   data() {
     return {
+      platform: process.platform,
       setting: false,
       loading: false,
       undowloading: true,
@@ -300,7 +305,6 @@ ul li {
 .re-fresh {
   position: fixed;
   left: 10px;
-  bottom: 3vh;
   z-index: 1;
   font-size: 24px;
   color: #ddd;
