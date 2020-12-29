@@ -2,8 +2,7 @@ const WorkerPlugin = require("worker-plugin");
 module.exports = {
   configureWebpack: {
     plugins: [new WorkerPlugin()],
-    devtool: 'source-map'
-
+    devtool: "source-map"
   },
   pluginOptions: {
     GN_TOKEN: "db28130a8bdeee1284b8a0377581cccc44ee8c38",
@@ -38,14 +37,15 @@ module.exports = {
         mac: {
           icon: "./build/icons/icon.icns"
         },
-        "win": {//win相关配置
-          "icon": "./build/icons/icon.icns",//图标，当前图标在根目录下，注意这里有两个坑
-          "target": [
+        win: {
+          //win相关配置
+          icon: "./build/icons/icon.icns", //图标，当前图标在根目录下，注意这里有两个坑
+          target: [
             {
-              "target": "nsis",//利用nsis制作安装程序
-              "arch": [
-                "x64",//64位
-                "ia32"//32位
+              target: "nsis", //利用nsis制作安装程序
+              arch: [
+                "x64", //64位
+                "ia32" //32位
               ]
             }
           ]

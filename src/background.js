@@ -3,6 +3,7 @@
 import { app, protocol, BrowserWindow, screen } from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import { autoUpdater } from "electron-updater";
+import AutoLaunch from "auto-launch";
 // import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 import path from "path";
 import createTray from "./background.tray.js";
@@ -83,18 +84,12 @@ app.on("ready", async () => {
   // }
   createWindow();
   createTray();
-  const appFolder = path.dirname(process.execPath);
-  const updateExe = path.resolve(appFolder, "..", "Update.exe");
-  const exeName = path.basename(process.execPath);
-  app.setLoginItemSettings({
-    openAtLogin: true,
-    path: updateExe,
-    args: [
-      "--processStart",
-      `"${exeName}"`,
-      "--process-start-args",
-      `"--hidden"`
-    ]
+  // 设置开机启动
+  let autoLaunch = new AutoLaunch({
+    name: "wall.paper"
+  });
+  autoLaunch.isEnabled().then(isEnabled => {
+    if (!isEnabled) autoLaunch.enable();
   });
 });
 
