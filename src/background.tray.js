@@ -18,8 +18,10 @@ export default function() {
     return { x, y };
   };
   const [win] = BrowserWindow.getAllWindows();
-  const position = getWindowPosition();
-  win.setPosition(position.x, position.y, false);
+  if (process.platform === "darwin") {
+    const position = getWindowPosition();
+    win.setPosition(position.x, position.y, false);
+  }
   win.show();
   win.setVisibleOnAllWorkspaces(true);
   win.focus();
