@@ -13,7 +13,7 @@ const setWallpaper = (downloadloc, cb) => {
   const command = `osascript -e 'tell application "System Events" to tell every desktop to set picture to "${downloadloc}"'`;
   if (osvar === "darwin") {
     // currently only macOS is supported.
-    exec(command, (err) => {
+    exec(command, err => {
       if (err) {
         if (cb) cb(err);
         // node couldn't execute the command
@@ -25,10 +25,10 @@ const setWallpaper = (downloadloc, cb) => {
   } else {
     wallpaper
       .set(downloadloc)
-      .then((_) => {
+      .then(_ => {
         if (cb) cb(_);
       })
-      .catch((error) => {
+      .catch(error => {
         if (cb) cb(error);
         throw error;
       });
@@ -40,15 +40,17 @@ ipcMain.on("setwapper", (_, { path, i }) => {
 });
 
 ipcMain.on("setpaper", (_, { path, i }) => {
-  downloadPic(path, (res) => {
+  downloadPic(path, res => {
     _.sender.send("reply-pro", res);
-  }).then((loc) => {
-    setWallpaper(loc, () => {
-      _.sender.send("reply-setpaper", { state: "done", i });
+  })
+    .then(loc => {
+      setWallpaper(loc, () => {
+        _.sender.send("reply-setpaper", { state: "done", i });
+      });
+    })
+    .catch(err => {
+      _.sender.send("reply-setpaper", { state: "error", i, err });
     });
-  }).catch(err => {
-    _.sender.send("reply-setpaper", { state: "error", i });
-  });
 });
 // 设置开机启动
 ipcMain.on("setloginitem", (_, openAtLogin) => {

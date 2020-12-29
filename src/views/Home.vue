@@ -106,6 +106,11 @@ export default {
     window.ipcRenderer.on("reply-setpaper", (event, data) => {
       const { i } = data;
       this.lists[i] = { ...this.lists[i], loading: false };
+      if (data.state === "error") {
+        new Notification("提示", {
+          body: "设置失败，请稍后重试！"
+        });
+      }
     });
     window.ipcRenderer.on("reply-pro", (event, data) => {
       const { total, current } = data;
