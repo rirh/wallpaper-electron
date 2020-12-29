@@ -26,7 +26,8 @@ async function createWindow() {
     transparent: true,
     frame: false,
     show: false,
-    resizable:false,
+    resizable: false,
+    alwaysOnTop:true,
     /* global __static */
     icon: path.join(__static, "icon.png"),
     webPreferences: {
@@ -39,17 +40,17 @@ async function createWindow() {
     }
   });
   // 检测是否MacOS darwin
-  if (process.platform === "darwin" || trayIcon) {
-    // 点击时显示窗口，并修改窗口的显示位置
-    trayIcon.on("click", () => {
-      win.setPosition(screen.getCursorScreenPoint().x - 282 / 2, 10);
-      if (win.isVisible()) {
-        win.hide();
-      } else {
-        win.show();
-      }
-    });
-  }
+  // if (process.platform === "darwin" || trayIcon) {
+  // 点击时显示窗口，并修改窗口的显示位置
+  trayIcon.on("click", () => {
+    win.setPosition(screen.getCursorScreenPoint().x - 282 / 2, 10);
+    if (win.isVisible()) {
+      win.hide();
+    } else {
+      win.show();
+    }
+  });
+  // }
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
@@ -94,7 +95,7 @@ app.on("ready", async () => {
   createWindow();
 });
 app.on("browser-window-blur", async () => {
-  // app.hide();
+  win.hide();
 });
 
 // Exit cleanly on request from parent process in development mode.
