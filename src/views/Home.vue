@@ -106,6 +106,7 @@ export default {
     window.ipcRenderer.on("reply-setpaper", (event, data) => {
       const { i } = data;
       this.lists[i] = { ...this.lists[i], loading: false };
+      this.undowloading = true;
       if (data.state === "error") {
         new Notification("提示", {
           body: "设置失败，请稍后重试！"
@@ -192,6 +193,8 @@ export default {
       if (loading) return;
       this.undowloading = false;
       this.currentImageIndex = i;
+      this.total = null;
+      this.current = null;
       this.lists[i] = { ...this.lists[i], loading: true };
       window.ipcRenderer.send("setpaper", { path, i });
     },
