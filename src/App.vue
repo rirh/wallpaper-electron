@@ -4,7 +4,11 @@
     <div class="contant">
       <div class="header" :class="{ drag: !ismac }">
         <div class="bg"></div>
-        <i @click="handleOpenSettingPage" class="setting el-icon-setting"></i>
+        <i
+          v-show="false"
+          @click="handleOpenSettingPage"
+          class="setting el-icon-setting"
+        ></i>
       </div>
       <router-view />
     </div>
@@ -15,13 +19,13 @@ export default {
   computed: {
     ismac() {
       return window.process.platform === "darwin";
-    },
+    }
   },
   methods: {
     handleOpenSettingPage() {
       window.ipcRenderer.send("opensettingpage");
-    },
-  },
+    }
+  }
 };
 </script>
 

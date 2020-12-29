@@ -14,7 +14,7 @@ protocol.registerSchemesAsPrivileged([
 ]);
 let win;
 async function createWindow() {
-  const iconPath = path.join(__dirname, "../src/assets/32x32@2x.png");
+  const iconPath = path.join(__dirname, "../src/assets/38x38@2x.png");
   const trayIcon = new Tray(iconPath);
   trayIcon.setToolTip(`${app.getName()}`);
   // Create the browser window.
@@ -41,47 +41,11 @@ async function createWindow() {
   if (process.platform === "darwin" || trayIcon) {
     // 点击时显示窗口，并修改窗口的显示位置
     trayIcon.on("click", () => {
-      const { width, height } = screen.getPrimaryDisplay().workAreaSize;
-      const [defaultWidth, defaultHeight] = [width, height].map(x =>
-        Math.round((x * 3) / 4)
-      );
-      const WINDOW_WIDTH = defaultWidth - 500;
-      const WINDOW_HEIGHT = defaultHeight;
-      const HORIZ_PADDING = 15;
-      const VERT_PADDING = 15;
-
-      const cursorPosition = screen.getCursorScreenPoint();
-      const primarySize = screen.getPrimaryDisplay().workAreaSize;
-      const trayPositionVert =
-        cursorPosition.y >= primarySize.height / 2 ? "bottom" : "top";
-      const trayPositionHoriz =
-        cursorPosition.x >= primarySize.width / 2 ? "right" : "left";
-
-      win.setPosition(getTrayPosX(), getTrayPosY());
+      win.setPosition(screen.getCursorScreenPoint().x - 282 / 2, 10);
       if (win.isVisible()) {
         win.hide();
       } else {
         win.show();
-      }
-      // 计算位置
-      function getTrayPosX() {
-        const horizBounds = {
-          left: cursorPosition.x - WINDOW_WIDTH / 2,
-          right: cursorPosition.x + WINDOW_WIDTH / 2
-        };
-        if (trayPositionHoriz === "left") {
-          return horizBounds.left <= HORIZ_PADDING
-            ? HORIZ_PADDING
-            : horizBounds.left;
-        }
-        return horizBounds.right >= primarySize.width
-          ? primarySize.width - HORIZ_PADDING - WINDOW_WIDTH
-          : horizBounds.right - WINDOW_WIDTH;
-      }
-      function getTrayPosY() {
-        return trayPositionVert === "bottom"
-          ? cursorPosition.y - WINDOW_HEIGHT - VERT_PADDING
-          : cursorPosition.y + VERT_PADDING;
       }
     });
   }
