@@ -1,5 +1,5 @@
 "use strict";
-import { app, ipcMain, BrowserView } from "electron";
+import { app, ipcMain, BrowserWindow } from "electron";
 import wallpaper from "wallpaper";
 import util from "util";
 import { downloadPic, cancelDownloadPic } from "@/utils/file";
@@ -57,16 +57,34 @@ ipcMain.on("setloginitem", (_, openAtLogin) => {
   app.setLoginItemSettings({ openAtLogin });
 });
 // 打开设置页面
-ipcMain.on("opensettingpage", () => {
-  const view = new BrowserView();
-  view.setBounds({ x: 400, y: 40, width: 300, height: 300 });
+ipcMain.on("opensettingpage", async () => {
+  let win = new BrowserWindow({
+    width: 400,
+    height: 275,
+    // y: 0,
+    // x: screen.getCursorScreenPoint(),
+    transparent: true,
+    frame: false,
+    // show: false,
+    fullscreenable: false,
+    resizable: false,
+    webPreferences: {
+      webSecurity: false,
+      // Use pluginOptions.nodeIntegration, leave this alone
+      // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
+      nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
+      enableRemoteModule: true,
+      preload: require("path").join(__dirname, "preload.js")
+    }
+  });
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
-    view.loadURL(`${process.env.WEBPACK_DEV_SERVER_URL}/setting`);
+    await win.loadURL(`${process.env.WEBPACK_DEV_SERVER_URL}?query=setting`);
+    if (!process.env.IS_TEST) win.webContents.openDevTools();
   } else {
     createProtocol("app");
     // Load the index.html when not in development
-    view.loadURL("app://./index.html/setting");
+    win.loadURL("app://./index.html");
   }
 });
 ipcMain.on("sendCanelDowload", () => {

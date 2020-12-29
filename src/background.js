@@ -1,5 +1,4 @@
 "use strict";
-
 import { app, protocol, BrowserWindow, screen } from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import { autoUpdater } from "electron-updater";
