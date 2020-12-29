@@ -3,9 +3,9 @@
 import { app, protocol, BrowserWindow, screen } from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import { autoUpdater } from "electron-updater";
-import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
+// import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 import path from "path";
-import createTray from './background.tray.js'
+import createTray from "./background.tray.js";
 import "./background.event.js";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
@@ -15,7 +15,6 @@ protocol.registerSchemesAsPrivileged([
 ]);
 let win;
 async function createWindow() {
-
   // Create the browser window.
   win = new BrowserWindow({
     width: 282,
@@ -24,7 +23,7 @@ async function createWindow() {
     x: screen.getCursorScreenPoint().x - 282 / 2 + 60,
     transparent: true,
     frame: false,
-    show: false,
+    show: true,
     resizable: false,
     /* global __static */
     icon: path.join(__static, "icon.png"),
@@ -47,12 +46,11 @@ async function createWindow() {
     win.loadURL("app://./index.html");
     autoUpdater.checkForUpdatesAndNotify();
   }
-  win.show();
 }
 
 // Quit when all windows are closed.
 app.on("window-all-closed", () => {
-  console.log('window-all-closed')
+  console.log("window-all-closed");
 
   // On macOS it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
@@ -62,36 +60,34 @@ app.on("window-all-closed", () => {
 });
 
 app.on("activate", () => {
-  console.log('activate')
+  console.log("activate");
 
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (BrowserWindow.getAllWindows().length === 0) createWindow();
   console.log(win);
-
 });
-
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on("ready", async () => {
-  if (isDevelopment && !process.env.IS_TEST) {
-    // Install Vue Devtools
-    try {
-      await installExtension(VUEJS_DEVTOOLS);
-    } catch (e) {
-      console.error("Vue Devtools failed to install:", e.toString());
-    }
-  }
-  createWindow();
+  // if (isDevelopment && !process.env.IS_TEST) {
+  // Install Vue Devtools
+  // try {
+  //   await installExtension(VUEJS_DEVTOOLS);
+  // } catch (e) {
+  //   console.error("Vue Devtools failed to install:", e.toString());
+  // }
+  // }
   createTray();
+  createWindow();
 });
 
 // Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {
   if (process.platform === "win32") {
-    process.on("message", (data) => {
+    process.on("message", data => {
       if (data === "graceful-exit") {
         app.quit();
       }
