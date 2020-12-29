@@ -2,6 +2,7 @@
 
 import { app, protocol, BrowserWindow, Tray, screen } from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
+import { autoUpdater } from "electron-updater";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 import path from "path";
 import "./background.event.js";
@@ -9,11 +10,11 @@ import "./background.event.js";
 const isDevelopment = process.env.NODE_ENV !== "production";
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
-  { scheme: "app", privileges: { secure: true, standard: true } },
+  { scheme: "app", privileges: { secure: true, standard: true } }
 ]);
 let win;
 async function createWindow() {
-  const iconPath = path.join(__dirname, "../src/assets/iconTemplate@2x.png");
+  const iconPath = path.join(__dirname, "../src/assets/32x32@2x.png");
   const trayIcon = new Tray(iconPath);
   trayIcon.setToolTip(`${app.getName()}`);
   // Create the browser window.
@@ -25,21 +26,23 @@ async function createWindow() {
     transparent: true,
     frame: false,
     show: false,
+    /* global __static */
+    icon: path.join(__static, "icon.png"),
     webPreferences: {
       webSecurity: false,
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
       enableRemoteModule: true,
-      preload: require("path").join(__dirname, "preload.js"),
-    },
+      preload: require("path").join(__dirname, "preload.js")
+    }
   });
   // 检测是否MacOS darwin
   if (process.platform === "darwin" || trayIcon) {
     // 点击时显示窗口，并修改窗口的显示位置
     trayIcon.on("click", () => {
       const { width, height } = screen.getPrimaryDisplay().workAreaSize;
-      const [defaultWidth, defaultHeight] = [width, height].map((x) =>
+      const [defaultWidth, defaultHeight] = [width, height].map(x =>
         Math.round((x * 3) / 4)
       );
       const WINDOW_WIDTH = defaultWidth - 500;
@@ -64,7 +67,7 @@ async function createWindow() {
       function getTrayPosX() {
         const horizBounds = {
           left: cursorPosition.x - WINDOW_WIDTH / 2,
-          right: cursorPosition.x + WINDOW_WIDTH / 2,
+          right: cursorPosition.x + WINDOW_WIDTH / 2
         };
         if (trayPositionHoriz === "left") {
           return horizBounds.left <= HORIZ_PADDING
@@ -90,6 +93,7 @@ async function createWindow() {
     createProtocol("app");
     // Load the index.html when not in development
     win.loadURL("app://./index.html");
+    autoUpdater.checkForUpdatesAndNotify();
   }
 }
 
@@ -131,7 +135,7 @@ app.on("browser-window-blur", async () => {
 // Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {
   if (process.platform === "win32") {
-    process.on("message", (data) => {
+    process.on("message", data => {
       if (data === "graceful-exit") {
         app.quit();
       }

@@ -1,5 +1,5 @@
 # wallpaper-electron
-修改为wappler
+
 ```
 win
 set ELECTRON_MIRROR="https://npm.taobao.org/mirrors/electron/"
@@ -11,13 +11,25 @@ npm
 npm config set electron_mirror https://npm.taobao.org/mirrors/electron/
 ```
 
+
+## config 
+```
+On Linux/MacOS:
+
+export GH_TOKEN=35ee29b9039e89bbdb1644d0b6663bca573ac84c
+
+On Windows:
+
+set GH_TOKEN=35ee29b9039e89bbdb1644d0b6663bca573ac84c
+
+```
 ## Project setup
 ```
 yarn install
 ```
 ## Data
 ```
-https://wallhaven.cc/search?q=1&categories=110&purity=100&sorting=date_added&order=desc
+https://f794c6c4-6af8-4d74-b405-d93ed7968c0f.bspapp.com/http/wall
 
 ```
 

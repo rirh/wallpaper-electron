@@ -1,10 +1,5 @@
 <template>
-  <ul
-    class="home"
-    @scroll="handleScroll"
-    v-infinite-scroll="load"
-    :infinite-scroll-distance="100"
-  >
+  <ul class="home" @scroll="handleScroll" v-infinite-scroll="load">
     <li class="empty">
       &nbsp;
     </li>
@@ -34,24 +29,21 @@
         />
       </el-avatar>
     </li>
-    <li class="empty-tips">稍等一会，美好的事情即将发生...</li>
+    <li class="empty-tips" v-show="showmore">稍等一会,美好的事情即将发生...</li>
     <li v-show="undowloading">
       <i
         @click="handleReload"
         :class="[
           're-fresh',
-          loading ? 'el-icon-loading' : 'el-icon-refresh-right',
+          loading ? 'el-icon-loading' : 'el-icon-refresh-right'
         ]"
       ></i>
     </li>
     <li class="download" v-show="!undowloading">
       <div class="contarl">
-        <div>
-          <span><i class="el-icon-refresh"></i><span>重新下载</span></span>
-          <span @click="handleCanelDowload"
-            ><i class="el-icon-close"></i><span>取消下载</span></span
-          >
-        </div>
+        <i class="el-icon-refresh"></i><span>重新下载</span>
+        <i @click="handleCanelDowload" class="el-icon-close"></i
+        ><span @click="handleCanelDowload">取消下载</span>
       </div>
       <div v-show="current > 0" class="load-bar">
         <span style="margin-right:10px">{{ current }}M/{{ total }}M</span>
@@ -81,11 +73,11 @@ const categories = [
   "new",
   "why",
   "beauty",
-  "weekday",
+  "sky",
   "new year",
   "sun",
   "shine",
-  new Date().getFullYear(),
+  new Date().getFullYear()
 ];
 // @ is an alias to /src
 export default {
@@ -102,10 +94,10 @@ export default {
       filterParams: {
         categories: 100,
         purity: 100,
-        page: 1,
+        page: 1
       },
-
-      lists: [],
+      showmore: true,
+      lists: []
     };
   },
   components: {},
@@ -124,8 +116,14 @@ export default {
   },
   methods: {
     handleScroll(e) {
-      console.log(e.target.scrollTop);
-      console.log(e);
+      if (
+        e.target.scrollTop + e.target.clientHeight >=
+        e.target.scrollHeight - 100
+      ) {
+        if (this.loading) return;
+        this.filterParams.page = this.filterParams.page + 1;
+        this.fetchList();
+      }
     },
     errorHandler() {
       return true;
@@ -134,7 +132,7 @@ export default {
       if (this.loading) return;
       this.filterParams = {
         page: 1,
-        q: categories[parseInt(Math.random() * categories.length - 1, 10) + 1],
+        q: categories[parseInt(Math.random() * categories.length - 1, 10) + 1]
       };
       this.fetchList();
       window.ipcRenderer.send("checkForUpdate");
@@ -149,31 +147,35 @@ export default {
             options: {
               method: "get",
               data: this.filterParams,
-              dataType: "json",
-            },
-          }),
+              dataType: "json"
+            }
+          })
         })
-          .then(async (response) => {
+          .then(async response => {
             this.response = await response.json();
             if (!this.response.data) return;
-            const lists = this.response.data.data.map((e) => ({
+            const lists = this.response.data.data.map(e => ({
               ...e,
-              loading: false,
+              loading: false
             }));
             if (this.filterParams.page === 1) {
               this.lists = lists;
+              this.$nextTick(() => {
+                document.querySelector(".empty").scrollIntoView({
+                  behavior: "smooth",
+                  block: "start"
+                });
+              });
             } else {
               this.lists = [...this.lists, ...lists];
+              this.showmore =
+                this.response.data.meta.total === this.lists.length
+                  ? false
+                  : true;
             }
             this.loading = false;
-            this.$nextTick(() => {
-              document.querySelector(".empty").scrollIntoView({
-                behavior: "smooth",
-                block: "start",
-              });
-            });
           })
-          .catch((err) => {
+          .catch(err => {
             this.loading = false;
             console.error(err);
           });
@@ -195,7 +197,7 @@ export default {
       this.current = null;
       this.lists[this.currentImageIndex] = {
         ...this.lists[this.currentImageIndex],
-        loading: false,
+        loading: false
       };
     },
     load() {
@@ -210,8 +212,8 @@ export default {
           str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
         }
       return str.join("&");
-    },
-  },
+    }
+  }
 };
 </script>
 <style>
@@ -243,7 +245,7 @@ ul li {
 }
 .image-item {
   position: relative;
-  filter: brightness(95%);
+  filter: brightness(85%);
 }
 .image-item {
   position: relative;
@@ -273,7 +275,7 @@ ul li {
 }
 
 .image-item:hover {
-  filter: brightness(105%);
+  filter: brightness(135%);
 }
 .image-item:hover .setwapper {
   opacity: 1;
@@ -323,7 +325,7 @@ ul li {
 }
 .contarl {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
 }
 .pro {
