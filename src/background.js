@@ -14,19 +14,7 @@ protocol.registerSchemesAsPrivileged([
 ]);
 let win;
 async function createWindow() {
-  const iconPath = path.join(__dirname, "../src/assets/38x38@2x.png");
-  const trayIcon = new Tray(iconPath);
-  trayIcon.setToolTip(`${app.getName()}`);
-  console.log()
-  const contextMenu = Menu.buildFromTemplate([
-    {
-      label: `开机启动：${app.getLoginItemSettings().openAtLogin ? '开' : '关'}`, click: function () {
-        app.setLoginItemSettings({ openAtLogin: !app.getLoginItemSettings().openAtLogin });
-      }
-    },
-    { label: '退出', click: function () { app.quit() } }
-  ])
-  trayIcon.setContextMenu(contextMenu)
+
   // Create the browser window.
   win = new BrowserWindow({
     width: 282,
@@ -49,18 +37,6 @@ async function createWindow() {
       preload: require("path").join(__dirname, "preload.js")
     }
   });
-  // 检测是否MacOS darwin
-  // if (process.platform === "darwin" || trayIcon) {
-  // 点击时显示窗口，并修改窗口的显示位置
-  trayIcon.on("click", () => {
-    win.setPosition(screen.getCursorScreenPoint().x - 282 / 2, 10);
-    if (win.isVisible()) {
-      win.hide();
-    } else {
-      win.show();
-    }
-  });
-  // }
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
@@ -71,6 +47,7 @@ async function createWindow() {
     win.loadURL("app://./index.html");
     autoUpdater.checkForUpdatesAndNotify();
   }
+  win.show();
 }
 
 // Quit when all windows are closed.
@@ -88,13 +65,12 @@ app.on("activate", () => {
   if (BrowserWindow.getAllWindows().length === 0) createWindow();
 });
 
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on("ready", async () => {
   if (isDevelopment && !process.env.IS_TEST) {
-    // 设置开机自动启动
-    app.setLoginItemSettings({ openAtLogin: true });
     // Install Vue Devtools
     try {
       await installExtension(VUEJS_DEVTOOLS);
@@ -103,15 +79,32 @@ app.on("ready", async () => {
     }
   }
   createWindow();
-});
-app.on("browser-window-blur", async () => {
-  win.hide();
+  const iconPath = path.join(__dirname, "../src/assets/38x38@2x.png");
+  const trayIcon = new Tray(iconPath);
+  trayIcon.setToolTip(`${app.getName()}`);
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: `开机启动：${app.getLoginItemSettings().openAtLogin ? '开' : '关'}`, click: function () {
+        app.setLoginItemSettings({ openAtLogin: !app.getLoginItemSettings().openAtLogin });
+      }
+    },
+    { label: '退出', click: function () { app.quit() } }
+  ])
+  trayIcon.setContextMenu(contextMenu)
+  trayIcon.on("click", () => {
+    win.setPosition(screen.getCursorScreenPoint().x - 282 / 2, 10);
+    if (win.isVisible()) {
+      win.hide();
+    } else {
+      win.show();
+    }
+  });
 });
 
 // Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {
   if (process.platform === "win32") {
-    process.on("message", data => {
+    process.on("message", (data) => {
       if (data === "graceful-exit") {
         app.quit();
       }
