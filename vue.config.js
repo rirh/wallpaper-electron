@@ -38,6 +38,18 @@ module.exports = {
         mac: {
           icon: "./build/icons/icon.icns"
         },
+        "win": {//win相关配置
+          "icon": "./build/icons/icon.icns",//图标，当前图标在根目录下，注意这里有两个坑
+          "target": [
+            {
+              "target": "nsis",//利用nsis制作安装程序
+              "arch": [
+                "x64",//64位
+                "ia32"//32位
+              ]
+            }
+          ]
+        },
         nsis: {
           oneClick: false, // 一键安装
           allowElevation: true, // 允许请求权限提升。如果为false，则用户必须使用提升的权限重新启动安装程序
@@ -45,7 +57,7 @@ module.exports = {
           perMachine: true, // 是否开启安装时权限限制(此电脑或当前用户)
           createDesktopShortcut: true, //创建桌面图标
           createStartMenuShortcut: true, // 创建开始菜单图标
-          shortcutName: "Paper", // 图标名称
+          shortcutName: "Wall.Paper", // 图标名称
           //guid:"", // 注册表名 不推荐修改
           installerIcon: "./build/icons/icon.ico", // 安装图标
           uninstallerIcon: "./build/icons/icon.ico", // 卸载图标
