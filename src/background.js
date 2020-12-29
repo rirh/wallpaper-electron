@@ -1,10 +1,11 @@
 "use strict";
 
-import { app, protocol, BrowserWindow, Tray, screen, Menu } from "electron";
+import { app, protocol, BrowserWindow, screen } from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import { autoUpdater } from "electron-updater";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 import path from "path";
+import createTray from './background.tray.js'
 import "./background.event.js";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
@@ -25,7 +26,6 @@ async function createWindow() {
     frame: false,
     show: false,
     resizable: false,
-    alwaysOnTop: true,
     /* global __static */
     icon: path.join(__static, "icon.png"),
     webPreferences: {
@@ -52,6 +52,8 @@ async function createWindow() {
 
 // Quit when all windows are closed.
 app.on("window-all-closed", () => {
+  console.log('window-all-closed')
+
   // On macOS it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== "darwin") {
@@ -60,6 +62,8 @@ app.on("window-all-closed", () => {
 });
 
 app.on("activate", () => {
+  console.log('activate')
+
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (BrowserWindow.getAllWindows().length === 0) createWindow();
@@ -79,26 +83,7 @@ app.on("ready", async () => {
     }
   }
   createWindow();
-  const iconPath = path.join(__dirname, "../src/assets/38x38@2x.png");
-  const trayIcon = new Tray(iconPath);
-  trayIcon.setToolTip(`${app.getName()}`);
-  const contextMenu = Menu.buildFromTemplate([
-    {
-      label: `开机启动：${app.getLoginItemSettings().openAtLogin ? '开' : '关'}`, click: function () {
-        app.setLoginItemSettings({ openAtLogin: !app.getLoginItemSettings().openAtLogin });
-      }
-    },
-    { label: '退出', click: function () { app.quit() } }
-  ])
-  trayIcon.setContextMenu(contextMenu)
-  trayIcon.on("click", () => {
-    win.setPosition(screen.getCursorScreenPoint().x - 282 / 2, 10);
-    if (win.isVisible()) {
-      win.hide();
-    } else {
-      win.show();
-    }
-  });
+  createTray();
 });
 
 // Exit cleanly on request from parent process in development mode.
