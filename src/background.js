@@ -93,7 +93,7 @@ app.on("ready", async () => {
   createWindow();
 });
 app.on("browser-window-blur", async () => {
-  // app.hide();
+  app.hide();
 });
 
 // Exit cleanly on request from parent process in development mode.
