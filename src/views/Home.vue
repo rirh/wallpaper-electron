@@ -292,7 +292,7 @@ ul li {
 .re-fresh {
   position: fixed;
   left: 10px;
-  bottom: 10px;
+  bottom: 3vh;
   z-index: 1;
   font-size: 24px;
   color: #ddd;

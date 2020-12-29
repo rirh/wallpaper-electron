@@ -46,6 +46,8 @@ ipcMain.on("setpaper", (_, { path, i }) => {
     setWallpaper(loc, () => {
       _.sender.send("reply-setpaper", { state: "done", i });
     });
+  }).catch(err => {
+    _.sender.send("reply-setpaper", { state: "error", i });
   });
 });
 // 设置开机启动

@@ -37,17 +37,16 @@ export function mkdirSync(dirname) {
  * @param {*} sendData  发送消息
  * @param {Object} userConfig 用户配置
  */
-export const downloadPic = async function(src, cb) {
+export const downloadPic = async function (src, cb) {
   return new Promise((resolve, reject) => {
     // 创建文件夹
-    const hostdir = `${require("os").homedir()}${
-      process.platform !== "darwin" ? "\\Downloads" : "/Downloads"
-    }`;
+    const hostdir = `${require("os").homedir()}${process.platform !== "darwin" ? "\\Downloads" : "/Downloads"
+      }`;
     // 文件名
     const fileName = src;
     mkdirSync(hostdir);
     const splita = fileName.split("/");
-    let dstpath = `${hostdir}/${splita[splita.length - 1]
+    let dstpath = `${hostdir}${process.platform !== "darwin" ? "\\" : '/'}${splita[splita.length - 1]
       .split("wallhaven")
       .join("wallpaper")}`;
     let isWebp = false;
@@ -60,7 +59,6 @@ export const downloadPic = async function(src, cb) {
 
     let receivedBytes = 0;
     let totalBytes = 0;
-
     const writeStream = fs.createWriteStream(dstpath, {
       autoClose: true,
     });
@@ -80,9 +78,9 @@ export const downloadPic = async function(src, cb) {
       if (cb) cb({ current: receivedBytes });
     });
 
-    myRequest.on("error", () => {
-      deleteDownLoadFile(dstpath);
-      reject();
+    myRequest.on("error", (err) => {
+      // deleteDownLoadFile(dstpath);
+      reject(err);
     });
     writeStream.on("finish", () => {
       writeStream.end();
@@ -117,7 +115,7 @@ export const downloadPic = async function(src, cb) {
 /**
  * 取消下载
  */
-export const cancelDownloadPic = function() {
+export const cancelDownloadPic = function () {
   return new Promise((resolve) => {
     if (myRequest) {
       myRequest.abort();

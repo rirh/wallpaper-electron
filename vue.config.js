@@ -1,7 +1,9 @@
 const WorkerPlugin = require("worker-plugin");
 module.exports = {
   configureWebpack: {
-    plugins: [new WorkerPlugin()]
+    plugins: [new WorkerPlugin()],
+    devtool: 'source-map'
+
   },
   pluginOptions: {
     GN_TOKEN: "db28130a8bdeee1284b8a0377581cccc44ee8c38",

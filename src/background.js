@@ -26,6 +26,7 @@ async function createWindow() {
     transparent: true,
     frame: false,
     show: false,
+    resizable:false,
     /* global __static */
     icon: path.join(__static, "icon.png"),
     webPreferences: {
@@ -93,7 +94,7 @@ app.on("ready", async () => {
   createWindow();
 });
 app.on("browser-window-blur", async () => {
-  app.hide();
+  // app.hide();
 });
 
 // Exit cleanly on request from parent process in development mode.
