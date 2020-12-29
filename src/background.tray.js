@@ -1,10 +1,10 @@
 "use strict";
 import path from 'path';
 import { app, Tray, Menu, screen } from "electron";
- 
+let tray = null;
 export default function () {
   const iconPath = path.join(__dirname, "../src/assets/38x38@2x.png");
-  const tray = new Tray(iconPath);
+  tray = new Tray(iconPath);
   tray.setToolTip(`${app.getName()}`);
   const contextMenu = Menu.buildFromTemplate([
     {
