@@ -1,6 +1,6 @@
 "use strict";
 
-import { app, protocol, BrowserWindow, Tray, screen } from "electron";
+import { app, protocol, BrowserWindow, Tray, screen, Menu } from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import { autoUpdater } from "electron-updater";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
@@ -17,6 +17,16 @@ async function createWindow() {
   const iconPath = path.join(__dirname, "../src/assets/38x38@2x.png");
   const trayIcon = new Tray(iconPath);
   trayIcon.setToolTip(`${app.getName()}`);
+  console.log()
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: `开机启动：${app.getLoginItemSettings().openAtLogin ? '开' : '关'}`, click: function () {
+        app.setLoginItemSettings({ openAtLogin: !app.getLoginItemSettings().openAtLogin });
+      }
+    },
+    { label: '退出', click: function () { app.quit() } }
+  ])
+  trayIcon.setContextMenu(contextMenu)
   // Create the browser window.
   win = new BrowserWindow({
     width: 282,
@@ -27,7 +37,7 @@ async function createWindow() {
     frame: false,
     show: false,
     resizable: false,
-    alwaysOnTop:true,
+    alwaysOnTop: true,
     /* global __static */
     icon: path.join(__static, "icon.png"),
     webPreferences: {
