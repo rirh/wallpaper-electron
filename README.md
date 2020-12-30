@@ -1,5 +1,5 @@
 # wallpaper-electron
- 
+
 
 ```
 win
@@ -14,7 +14,11 @@ npm config set electron_mirror https://npm.taobao.org/mirrors/electron/
 ```
 
 
+
+![mac](/Users/zh/Documents/workspace/zorg/wallpaper-electron/docs/mac.png)
+
 ## config 
+
 ```
 On Linux/MacOS:
 
