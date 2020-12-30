@@ -1,8 +1,9 @@
 {
   "name": "wall.paper",
   "version": "0.0.1",
-  "private": true,
   "description": "wallpaper for mac & win",
+  "license": "MIT",
+  "private": true,
   "author": {
     "name": "TigerZH",
     "email": "only_tigerhu@163.com",
@@ -51,7 +52,8 @@
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^7.0.0-0",
     "lint-staged": "^9.5.0",
-    "vue-cli-plugin-electron-builder": "^2.0.0-rc.5"
+    "vue-cli-plugin-electron-builder": "^2.0.0-rc.5",
+    "worker-loader": "^3.0.7"
   },
   "eslintConfig": {
     "root": true,

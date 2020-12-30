@@ -1,26 +1,26 @@
 <template>
-  <ul class="home" @scroll="handleScroll" v-infinite-scroll="load">
+  <ul class="home" @scroll="handleScroll">
     <li class="empty">
       &nbsp;
     </li>
-    <li
-      class="image-item"
-      v-for="({ id, path, category, thumbs, loading }, i) in lists"
-      :key="id"
-    >
-      <span class="setwapper" @click.stop="handleSetWapper(loading, path, i)">
+    <li class="image-item" v-for="(item, i) in lists" :key="item.id">
+      <span
+        class="setwapper"
+        @click.stop="handleSetWapper(item.loading, item.urls.full, i)"
+      >
         <i
-          :class="loading ? 'el-icon-loading' : 'el-icon-monitor'"
+          :class="item.loading ? 'el-icon-loading' : 'el-icon-monitor'"
           style="color:#fff"
         ></i>
-        设为桌面</span
+        设为桌面
+      </span>
+      <span class="auth" @click="handleGoAuth(item)"
+        >@{{ item.user.name }}</span
       >
-
       <el-avatar
         fit="cover"
-        :alt="category"
         class="avatar"
-        :src="thumbs.small"
+        :src="item.urls.small"
         shape="square"
         @error="errorHandler"
       >
@@ -61,31 +61,15 @@
 </template>
 
 <script>
-const categories = [
-  "last",
-  "people",
-  "top",
-  "card",
-  "flower",
-  "happy",
-  "sad",
-  "house",
-  "lake",
-  "girl",
-  "boy",
-  "new",
-  "why",
-  "beauty",
-  "sky",
-  "new year",
-  "sun",
-  "shine",
-  new Date().getFullYear()
-];
 // @ is an alias to /src
-
+import { mapState } from "vuex";
 export default {
   name: "Home",
+  computed: {
+    ...mapState({
+      cursor: state => state.cursor
+    })
+  },
   data() {
     return {
       platform: process.platform,
@@ -97,17 +81,42 @@ export default {
       currentImageIndex: 0,
       url: "https://f794c6c4-6af8-4d74-b405-d93ed7968c0f.bspapp.com/http/wall?",
       filterParams: {
-        categories: 100,
-        purity: 100,
+        limit: 10,
         page: 1
       },
       showmore: true,
       lists: []
     };
   },
-  components: {},
+  watch: {
+    cursor() {
+      this.filterParams = {
+        limit: 10,
+        page: 1
+      };
+      this.fetchList();
+    }
+  },
   mounted() {
     this.fetchList();
+    window.ipcRenderer.send("autoChangeWall");
+    window.ipcRenderer.on("reply-auto-change-wall", () => {
+      fetch(`${this.url}`, {
+        method: "POST",
+        body: JSON.stringify({
+          options: {
+            method: "get",
+            data: { type: 1, count: 1 },
+            dataType: "json"
+          }
+        })
+      }).then(async response => {
+        const {
+          data: [item]
+        } = await response.json();
+        window.ipcRenderer.send("setpaper", { path: item.urls.full });
+      });
+    });
     window.ipcRenderer.on("reply-setpaper", (event, data) => {
       const { i } = data;
       this.lists[i] = { ...this.lists[i], loading: false };
@@ -126,6 +135,10 @@ export default {
     });
   },
   methods: {
+    handleGoAuth(item) {
+      const { shell } = window.electron;
+      shell.openExternal(item.user.links.html);
+    },
     handleScroll(e) {
       if (
         e.target.scrollTop + e.target.clientHeight >=
@@ -143,13 +156,14 @@ export default {
       if (this.loading) return;
       this.filterParams = {
         page: 1,
-        q: categories[parseInt(Math.random() * categories.length - 1, 10) + 1]
+        limit: 10
       };
       this.fetchList();
       window.ipcRenderer.send("checkForUpdate");
     },
     fetchList() {
       this.loading = true;
+      this.filterParams.order_by = this.cursor;
       // fetch(`${this.baseUri}${this.object2URL(this.filterParams)}`, {
       try {
         fetch(`${this.url}`, {
@@ -164,8 +178,7 @@ export default {
         })
           .then(async response => {
             this.response = await response.json();
-            if (!this.response.data) return;
-            const lists = this.response.data.data.map(e => ({
+            const lists = this.response.data.map(e => ({
               ...e,
               loading: false
             }));
@@ -179,10 +192,6 @@ export default {
               });
             } else {
               this.lists = [...this.lists, ...lists];
-              this.showmore =
-                this.response.data.meta.total === this.lists.length
-                  ? false
-                  : true;
             }
             this.loading = false;
           })
@@ -247,7 +256,7 @@ ul li {
   overflow-x: hidden;
 }
 .empty {
-  height: 60px;
+  height: 64px;
   background: #ddd;
   width: 100%;
 }
@@ -283,6 +292,24 @@ ul li {
   font-size: 14px;
   user-select: none;
 }
+.auth {
+  position: absolute;
+  bottom: 5px;
+  opacity: 0;
+  right: -7px;
+  /* transform: translate(-59px); */
+  transition: all 200ms ease-in-out;
+  /* background-color: rgba(0, 0, 0, 0.8); */
+  padding: 8px 20px;
+  border-radius: 20px;
+  color: #eee;
+  cursor: pointer;
+  font-size: 10px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
 .setwapper:hover {
   background-color: rgba(0, 0, 0, 0.6);
 }
@@ -291,6 +318,9 @@ ul li {
   filter: brightness(135%);
 }
 .image-item:hover .setwapper {
+  opacity: 1;
+}
+.image-item:hover .auth {
   opacity: 1;
 }
 .avatar,

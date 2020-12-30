@@ -90,3 +90,14 @@ ipcMain.on("opensettingpage", async () => {
 ipcMain.on("sendCanelDowload", () => {
   cancelDownloadPic();
 });
+ipcMain.on("autoChangeWall", _ => {
+  let timer = null;
+  const startTimeChange = () => {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(() => {
+      _.sender.send("reply-auto-change-wall");
+      startTimeChange();
+    }, 1000 * 60 * 60 * 24);
+  };
+  startTimeChange();
+});

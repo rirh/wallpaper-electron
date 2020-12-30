@@ -1,8 +1,9 @@
 {
   "name": "wall.paper",
   "version": "0.0.1",
-  "private": true,
   "description": "wallpaper for mac & win",
+  "license": "MIT",
+  "private": true,
   "author": {
     "name": "TigerZH",
     "email": "only_tigerhu@163.com",

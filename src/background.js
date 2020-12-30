@@ -26,6 +26,7 @@ async function createWindow() {
     show: false,
     fullscreenable: false,
     resizable: false,
+    alwaysOnTop: true,
     /* global __static */
     icon: path.join(__static, "icon.png"),
     webPreferences: {
@@ -91,7 +92,10 @@ app.on("ready", async () => {
     if (!isEnabled) autoLaunch.enable();
   });
 });
-
+app.on("browser-window-blur", () => {
+  const [win] = BrowserWindow.getAllWindows();
+  win.hide();
+});
 // Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {
   if (process.platform === "win32") {

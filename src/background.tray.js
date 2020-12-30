@@ -23,21 +23,19 @@ export default function() {
     win.setPosition(position.x, position.y, false);
   }
   win.show();
-  win.setVisibleOnAllWorkspaces(true);
   win.focus();
-  win.setVisibleOnAllWorkspaces(false);
   if (process.platform !== "darwin") {
     const contextMenu = Menu.buildFromTemplate([
-      {
-        label: `开机启动：${
-          app.getLoginItemSettings().openAtLogin ? "开" : "关"
-        }`,
-        click: function() {
-          app.setLoginItemSettings({
-            openAtLogin: !app.getLoginItemSettings().openAtLogin
-          });
-        }
-      },
+      // {
+      //   label: `开机启动：${
+      //     app.getLoginItemSettings().openAtLogin ? "开" : "关"
+      //   }`,
+      //   click: function() {
+      //     app.setLoginItemSettings({
+      //       openAtLogin: !app.getLoginItemSettings().openAtLogin
+      //     });
+      //   }
+      // },
       {
         label: "退出",
         click: function() {
