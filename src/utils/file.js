@@ -37,16 +37,26 @@ export function mkdirSync(dirname) {
  * @param {*} sendData  发送消息
  * @param {Object} userConfig 用户配置
  */
-export const downloadPic = async function (src, cb) {
+export const downloadPic = async function(src, cb) {
   return new Promise((resolve, reject) => {
     // 创建文件夹
-    const hostdir = `${require("os").homedir()}${process.platform !== "darwin" ? "\\Downloads" : "/Downloads"
-      }`;
+    const hostdir = `${require("os").homedir()}${
+      process.platform !== "darwin" ? "\\Downloads" : "/Downloads"
+    }`;
     // 文件名
     const fileName = src;
     mkdirSync(hostdir);
-    const obj = JSON.parse('{"' + decodeURI(fileName).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}')
-    let dstpath = `${hostdir}${process.platform !== "darwin" ? "\\" : '/'}wallpaper-${Date.now()}.${obj.fm}`;
+    const obj = JSON.parse(
+      '{"' +
+        decodeURI(fileName)
+          .replace(/"/g, '\\"')
+          .replace(/&/g, '","')
+          .replace(/=/g, '":"') +
+        '"}'
+    );
+    let dstpath = `${hostdir}${
+      process.platform !== "darwin" ? "\\" : "/"
+    }wallpaper-${fileName.split("/")[3].split("?")[0]}.${obj.fm}`;
     let isWebp = false;
     // 如图图片已经下载完成了
     if (fs.existsSync(`${dstpath}`)) {
@@ -57,25 +67,25 @@ export const downloadPic = async function (src, cb) {
     let receivedBytes = 0;
     let totalBytes = 0;
     const writeStream = fs.createWriteStream(dstpath, {
-      autoClose: true,
+      autoClose: true
     });
     myRequest = request({
       url: src,
-      timeout: 120000, // 120s
+      timeout: 120000 // 120s
     });
     myRequest.pipe(writeStream);
-    myRequest.on("response", (data) => {
+    myRequest.on("response", data => {
       // 更新总文件字节大小
       totalBytes = parseInt(data.headers["content-length"], 10);
       cb({ total: totalBytes });
     });
-    myRequest.on("data", (chunk) => {
+    myRequest.on("data", chunk => {
       // 更新下载的文件块字节大小
       receivedBytes += chunk.length;
       if (cb) cb({ current: receivedBytes });
     });
 
-    myRequest.on("error", (err) => {
+    myRequest.on("error", err => {
       // deleteDownLoadFile(dstpath);
       reject(err);
     });
@@ -84,20 +94,15 @@ export const downloadPic = async function (src, cb) {
       myRequest = null;
       if (receivedBytes === totalBytes) {
         if (isWebp) {
-          webp.dwebp(
-            dstpath,
-            dstpath.replace("webp", "jpg"),
-            "-o",
-            (status) => {
-              // status 101->fails || 100->successful
-              if (status === "100") {
-                deleteDownLoadFile(dstpath);
-                resolve(dstpath.replace("webp", "jpg"));
-              } else {
-                reject();
-              }
+          webp.dwebp(dstpath, dstpath.replace("webp", "jpg"), "-o", status => {
+            // status 101->fails || 100->successful
+            if (status === "100") {
+              deleteDownLoadFile(dstpath);
+              resolve(dstpath.replace("webp", "jpg"));
+            } else {
+              reject();
             }
-          );
+          });
         } else {
           resolve(dstpath);
         }
@@ -112,8 +117,8 @@ export const downloadPic = async function (src, cb) {
 /**
  * 取消下载
  */
-export const cancelDownloadPic = function () {
-  return new Promise((resolve) => {
+export const cancelDownloadPic = function() {
+  return new Promise(resolve => {
     if (myRequest) {
       myRequest.abort();
       deleteDownLoadFile(currentSaveFilePath);
@@ -126,7 +131,7 @@ function deleteDownLoadFile(filePath) {
   try {
     // 取消下载的时候删除图片
     if (fs.existsSync(filePath)) {
-      fs.unlink(filePath, (err) => {
+      fs.unlink(filePath, err => {
         if (err) {
           console.log("图片已删除");
         }
