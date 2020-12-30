@@ -2,9 +2,13 @@
   <div class="app-main">
     <div class="box" v-if="ismac"></div>
     <div class="contant">
-      <div class="header" :class="{ drag: !ismac }">
+      <div
+        class="header"
+        :style="{ top: ismac ? '10px' : 0 }"
+        :class="{ drag: !ismac }"
+      >
         <div class="bg"></div>
-        <div class="tags">
+        <div class="tags no-drag">
           <div
             @click="$store.commit('updateCursor', 'latest')"
             :class="['tag-item', cursor === 'latest' ? 'tag-item-active' : '']"
@@ -39,17 +43,17 @@ import { mapState } from "vuex";
 export default {
   computed: {
     ...mapState({
-      cursor: state => state.cursor
+      cursor: (state) => state.cursor,
     }),
     ismac() {
       return window.process.platform === "darwin";
-    }
+    },
   },
   methods: {
     handleOpenSettingPage() {
       window.ipcRenderer.send("opensettingpage");
-    }
-  }
+    },
+  },
 };
 </script>
 

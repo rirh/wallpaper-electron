@@ -45,10 +45,8 @@ export const downloadPic = async function (src, cb) {
     // 文件名
     const fileName = src;
     mkdirSync(hostdir);
-    const splita = fileName.split("/");
-    let dstpath = `${hostdir}${process.platform !== "darwin" ? "\\" : '/'}${splita[splita.length - 1]
-      .split("wallhaven")
-      .join("wallpaper")}`;
+    const obj = JSON.parse('{"' + decodeURI(fileName).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}')
+    let dstpath = `${hostdir}${process.platform !== "darwin" ? "\\" : '/'}wallpaper-${Date.now()}.${obj.fm}`;
     let isWebp = false;
     // 如图图片已经下载完成了
     if (fs.existsSync(`${dstpath}`)) {
@@ -56,7 +54,6 @@ export const downloadPic = async function (src, cb) {
       return;
     }
     currentSaveFilePath = dstpath;
-
     let receivedBytes = 0;
     let totalBytes = 0;
     const writeStream = fs.createWriteStream(dstpath, {

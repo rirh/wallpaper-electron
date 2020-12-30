@@ -93,8 +93,8 @@ app.on("ready", async () => {
   });
 });
 app.on("browser-window-blur", () => {
-  const [win] = BrowserWindow.getAllWindows();
-  win.hide();
+  // const [win] = BrowserWindow.getAllWindows();
+  // win.hide();
 });
 // Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {

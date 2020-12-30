@@ -2,7 +2,7 @@
 import path from "path";
 import { app, Tray, Menu, BrowserWindow } from "electron";
 let tray = null;
-export default function() {
+export default function () {
   // eslint-disable-next-line no-undef
   const iconPath = path.join(__static, "38x38@2x.png");
   tray = new Tray(iconPath);
@@ -37,8 +37,15 @@ export default function() {
       //   }
       // },
       {
+        label: "最小化",
+        click: function () {
+          const [win] = BrowserWindow.getAllWindows()
+          win.hide()
+        }
+      },
+      {
         label: "退出",
-        click: function() {
+        click: function () {
           app.quit();
         }
       }

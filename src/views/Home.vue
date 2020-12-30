@@ -1,8 +1,6 @@
 <template>
   <ul class="home" @scroll="handleScroll">
-    <li class="empty">
-      &nbsp;
-    </li>
+    <li class="empty">&nbsp;</li>
     <li class="image-item" v-for="(item, i) in lists" :key="item.id">
       <span
         class="setwapper"
@@ -10,7 +8,7 @@
       >
         <i
           :class="item.loading ? 'el-icon-loading' : 'el-icon-monitor'"
-          style="color:#fff"
+          style="color: #fff"
         ></i>
         设为桌面
       </span>
@@ -35,19 +33,20 @@
         @click="handleReload"
         :class="[
           're-fresh',
-          loading ? 'el-icon-loading' : 'el-icon-refresh-right'
+          loading ? 'el-icon-loading' : 'el-icon-refresh-right',
         ]"
         :style="{ bottom: platform === 'darwin' ? '13px' : '4vh' }"
       ></i>
     </li>
     <li class="download" v-show="!undowloading">
       <div class="contarl">
-        <i class="el-icon-refresh"></i><span>重新下载</span>
+        <i class="el-icon-refresh" @click="handleReDowload"></i
+        ><span @click="handleReDowload">重新下载</span>
         <i @click="handleCanelDowload" class="el-icon-close"></i
         ><span @click="handleCanelDowload">取消下载</span>
       </div>
       <div v-show="current > 0" class="load-bar">
-        <span style="margin-right:10px"
+        <span style="margin-right: 10px"
           >{{ current }}M&nbsp;/&nbsp;{{ total }}M</span
         >
       </div>
@@ -67,8 +66,8 @@ export default {
   name: "Home",
   computed: {
     ...mapState({
-      cursor: state => state.cursor
-    })
+      cursor: (state) => state.cursor,
+    }),
   },
   data() {
     return {
@@ -82,20 +81,20 @@ export default {
       url: "https://f794c6c4-6af8-4d74-b405-d93ed7968c0f.bspapp.com/http/wall?",
       filterParams: {
         limit: 10,
-        page: 1
+        page: 1,
       },
       showmore: true,
-      lists: []
+      lists: [],
     };
   },
   watch: {
     cursor() {
       this.filterParams = {
         limit: 10,
-        page: 1
+        page: 1,
       };
       this.fetchList();
-    }
+    },
   },
   mounted() {
     this.fetchList();
@@ -107,12 +106,12 @@ export default {
           options: {
             method: "get",
             data: { type: 1, count: 1 },
-            dataType: "json"
-          }
-        })
-      }).then(async response => {
+            dataType: "json",
+          },
+        }),
+      }).then(async (response) => {
         const {
-          data: [item]
+          data: [item],
         } = await response.json();
         window.ipcRenderer.send("setpaper", { path: item.urls.full });
       });
@@ -123,7 +122,7 @@ export default {
       this.undowloading = true;
       if (data.state === "error") {
         new Notification("提示", {
-          body: "设置失败，请稍后重试！"
+          body: "设置失败，请稍后重试！",
         });
       }
     });
@@ -135,6 +134,14 @@ export default {
     });
   },
   methods: {
+    handleReDowload() {
+      window.ipcRenderer.send("sendCanelDowload");
+      this.handleSetWapper(
+        this.lists[this.currentImageIndex].loading,
+        this.lists[this.currentImageIndex].path,
+        this.currentImageIndex
+      );
+    },
     handleGoAuth(item) {
       const { shell } = window.electron;
       shell.openExternal(item.user.links.html);
@@ -156,7 +163,7 @@ export default {
       if (this.loading) return;
       this.filterParams = {
         page: 1,
-        limit: 10
+        limit: 10,
       };
       this.fetchList();
       window.ipcRenderer.send("checkForUpdate");
@@ -172,22 +179,22 @@ export default {
             options: {
               method: "get",
               data: this.filterParams,
-              dataType: "json"
-            }
-          })
+              dataType: "json",
+            },
+          }),
         })
-          .then(async response => {
+          .then(async (response) => {
             this.response = await response.json();
-            const lists = this.response.data.map(e => ({
+            const lists = this.response.data.map((e) => ({
               ...e,
-              loading: false
+              loading: false,
             }));
             if (this.filterParams.page === 1) {
               this.lists = lists;
               this.$nextTick(() => {
                 document.querySelector(".empty").scrollIntoView({
                   behavior: "smooth",
-                  block: "start"
+                  block: "start",
                 });
               });
             } else {
@@ -195,7 +202,7 @@ export default {
             }
             this.loading = false;
           })
-          .catch(err => {
+          .catch((err) => {
             this.loading = false;
             console.error(err);
           });
@@ -205,6 +212,10 @@ export default {
     },
     handleSetWapper(loading, path, i) {
       if (loading) return;
+      if (!this.undowloading) {
+        window.ipcRenderer.send("sendCanelDowload");
+        this.lists[this.currentImageIndex] = { ...this.lists[this.currentImageIndex], loading: false };
+      }
       this.undowloading = false;
       this.currentImageIndex = i;
       this.total = null;
@@ -219,7 +230,7 @@ export default {
       this.current = null;
       this.lists[this.currentImageIndex] = {
         ...this.lists[this.currentImageIndex],
-        loading: false
+        loading: false,
       };
     },
     load() {
@@ -234,8 +245,8 @@ export default {
           str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
         }
       return str.join("&");
-    }
-  }
+    },
+  },
 };
 </script>
 <style>
@@ -369,6 +380,7 @@ ul li {
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  user-select: none;
 }
 .pro {
   position: fixed;
