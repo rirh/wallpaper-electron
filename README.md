@@ -1,4 +1,5 @@
 # wallpaper-electron
+ 
 
 ```
 win
@@ -9,6 +10,7 @@ yarn
 yarn config set electron_mirror https://npm.taobao.org/mirrors/electron/
 npm 
 npm config set electron_mirror https://npm.taobao.org/mirrors/electron/
+
 ```
 
 
@@ -26,6 +28,7 @@ set GH_TOKEN=35ee29b9039e89bbdb1644d0b6663bca573ac84c
 ## Project setup
 ```
 yarn install
+
 ```
 ## Data
 ```
