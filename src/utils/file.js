@@ -45,18 +45,24 @@ export const downloadPic = async function(src, cb) {
     }`;
     // 文件名
     const fileName = src;
+    console.log(src);
+
     mkdirSync(hostdir);
-    const obj = JSON.parse(
-      '{"' +
-        decodeURI(fileName)
-          .replace(/"/g, '\\"')
-          .replace(/&/g, '","')
-          .replace(/=/g, '":"') +
-        '"}'
-    );
+    // const obj = JSON.parse(
+    //   '{"' +
+    //     decodeURI(fileName)
+    //       .replace(/"/g, '\\"')
+    //       .replace(/&/g, '","')
+    //       .replace(/=/g, '":"') +
+    //     '"}'
+    // );
+    // console.log(obj)
+    const psp = fileName.split("/");
+    let lasname = psp[psp.length - 1];
+    lasname = lasname.split("wallhaven").join("wall.paper");
     let dstpath = `${hostdir}${
       process.platform !== "darwin" ? "\\" : "/"
-    }wallpaper-${fileName.split("/")[3].split("?")[0]}.${obj.fm}`;
+    }${lasname}`;
     let isWebp = false;
     // 如图图片已经下载完成了
     if (fs.existsSync(`${dstpath}`)) {
