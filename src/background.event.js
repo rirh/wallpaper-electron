@@ -44,6 +44,7 @@ ipcMain.on("setpaper", (_, { path, i }) => {
     _.sender.send("reply-pro", res);
   })
     .then(loc => {
+      console.log(loc)
       setWallpaper(loc, () => {
         _.sender.send("reply-setpaper", { state: "done", i });
       });

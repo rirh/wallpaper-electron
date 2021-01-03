@@ -45,8 +45,6 @@ export const downloadPic = async function(src, cb) {
     }`;
     // 文件名
     const fileName = src;
-    console.log(src);
-
     mkdirSync(hostdir);
     // const obj = JSON.parse(
     //   '{"' +
@@ -59,7 +57,7 @@ export const downloadPic = async function(src, cb) {
     // console.log(obj)
     const psp = fileName.split("/");
     let lasname = psp[psp.length - 1];
-    lasname = lasname.split("wallhaven").join("wall.paper");
+    lasname = lasname.split("wallhaven").join("wallpaper");
     let dstpath = `${hostdir}${
       process.platform !== "darwin" ? "\\" : "/"
     }${lasname}`;
@@ -92,7 +90,7 @@ export const downloadPic = async function(src, cb) {
     });
 
     myRequest.on("error", err => {
-      // deleteDownLoadFile(dstpath);
+      deleteDownLoadFile(dstpath);
       reject(err);
     });
     writeStream.on("finish", () => {

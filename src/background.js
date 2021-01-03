@@ -26,7 +26,7 @@ async function createWindow() {
     show: false,
     fullscreenable: false,
     resizable: false,
-    alwaysOnTop: true,
+    alwaysOnTop: false,
     /* global __static */
     icon: path.join(__static, "icon.png"),
     webPreferences: {
