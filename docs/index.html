@@ -31,6 +31,11 @@
       }
       .contant {
         margin: 12vh 10vw 0;
+        height: 80vh;
+        overflow: scroll;
+      }
+      .contant::-webkit-scrollbar {
+        display: none;
       }
 
       .name {
@@ -72,6 +77,34 @@
         font-weight: 300;
         font-size: 14px;
         text-shadow: 0 0 15px rgba(0, 0, 0, 0.9);
+      }
+      @media screen and (max-width: 800px) {
+        html,
+        body {
+          margin: 0;
+          padding: 0;
+          background-image: url("https://vkceyugu.cdn.bspapp.com/VKCEYUGU-aliyun-x0zn4w1xdkfo451f35/ee355230-4a90-11eb-8ff1-d5dcf8779628.jpg");
+          /* background-repeat: no-repeat; */
+          background-size: 100% 100%;
+          background-position: left top;
+          height: 100vh;
+          width: 100vw;
+          overflow: hidden;
+          box-sizing: border-box;
+          line-height: 1.15;
+          background-color: #000;
+        }
+        .name {
+          font-size: 50px;
+        }
+        .desc {
+          font-size: 20px;
+        }
+        a {
+          margin-left: 0 !important;
+          padding: 10px 20px;
+          font-size: 16px;
+        }
       }
     </style>
   </head>

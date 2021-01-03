@@ -5,7 +5,6 @@ module.exports = {
     devtool: "source-map"
   },
   pluginOptions: {
-    GN_TOKEN: "db28130a8bdeee1284b8a0377581cccc44ee8c38",
     electronBuilder: {
       // List native deps here if they don't work
       externals: ["my-native-dep"],
