@@ -12,9 +12,9 @@
         ></i>
         设为桌面
       </span>
-      <span class="auth" @click="handleGoAuth(item)"
+      <!-- <span class="auth" @click="handleGoAuth(item)"
         >@{{ item.user.name }}</span
-      >
+      > -->
       <el-avatar
         fit="cover"
         class="avatar"
