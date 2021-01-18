@@ -17,8 +17,8 @@ let win;
 async function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
-    width: 282,
-    height: 600,
+    width: 290,
+    height: 610,
     y: 0,
     x: screen.getCursorScreenPoint().x - 282 / 2 + 60,
     transparent: true,
@@ -68,6 +68,10 @@ app.on("activate", () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   console.log(win);
+});
+app.on("browser-window-blur", () => {
+  // const [win] = BrowserWindow.getAllWindows();
+  // win.hide();
 });
 
 // This method will be called when Electron has finished

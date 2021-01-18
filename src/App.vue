@@ -29,7 +29,7 @@
           </div>
         </div>
         <i
-          v-show="true"
+          v-show="false"
           class="setting el-icon-setting"
           @click="handleOpenSettingPage"
         ></i>
@@ -81,15 +81,15 @@ export default {
   width: 100vw;
   overflow-y: scroll;
   overflow-x: hidden;
-  border-radius: 10px;
-  background-color: black;
+  border-radius: 5px;
+  background-color: #0F131C;
 }
 .header {
   position: fixed;
   top: 10px;
   left: 0;
-  border-top-right-radius: 10px;
-  border-top-left-radius: 10px;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
   padding: 10px;
   /* background-color: black; */
   color: rgba(255, 255, 255, 1);
@@ -100,7 +100,7 @@ export default {
   height: 55px;
   background-position: 40% 0%;
   z-index: 1;
-  border-bottom: 1px solid #000;
+  border-bottom: 1px solid #0F131C;
 }
 .setting {
   position: absolute;
