@@ -70,8 +70,8 @@ app.on("activate", () => {
   console.log(win);
 });
 app.on("browser-window-blur", () => {
-  // const [win] = BrowserWindow.getAllWindows();
-  // win.hide();
+  const [win] = BrowserWindow.getAllWindows();
+  win.hide();
 });
 
 // This method will be called when Electron has finished
