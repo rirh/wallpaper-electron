@@ -70,8 +70,8 @@ app.on("activate", () => {
   console.log(win);
 });
 app.on("browser-window-blur", () => {
-  const [win] = BrowserWindow.getAllWindows();
-  win.hide();
+  // const [win] = BrowserWindow.getAllWindows();
+  // win.hide();
 });
 
 // This method will be called when Electron has finished
@@ -89,14 +89,16 @@ app.on("ready", async () => {
   createWindow();
   createTray();
   // 设置开机启动
-  let autoLaunch = new AutoLaunch({
-    name: "wall.paper",
-    path: process.env.APPIMAGE,
-    isHidden: true
-  });
-  autoLaunch.isEnabled().then(isEnabled => {
-    if (!isEnabled) autoLaunch.enable();
-  });
+  if (!isDevelopment) {
+    let alConfig = { name: "wall.paper", isHidden: true };
+    if (process.env.APPIMAGE) {
+      alConfig = Object.assign(alConfig, { path: process.env.APPIMAGE });
+    }
+    let autoLaunch = new AutoLaunch(alConfig);
+    autoLaunch.isEnabled().then(isEnabled => {
+      if (!isEnabled) autoLaunch.enable();
+    });
+  }
 });
 app.on("browser-window-blur", () => {
   // const [win] = BrowserWindow.getAllWindows();
