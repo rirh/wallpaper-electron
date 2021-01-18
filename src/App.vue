@@ -29,9 +29,9 @@
           </div>
         </div>
         <i
-          v-show="false"
-          @click="handleOpenSettingPage"
+          v-show="true"
           class="setting el-icon-setting"
+          @click="handleOpenSettingPage"
         ></i>
       </div>
       <router-view />
@@ -43,17 +43,17 @@ import { mapState } from "vuex";
 export default {
   computed: {
     ...mapState({
-      cursor: (state) => state.cursor,
+      cursor: state => state.cursor
     }),
     ismac() {
       return window.process.platform === "darwin";
-    },
+    }
   },
   methods: {
     handleOpenSettingPage() {
       window.ipcRenderer.send("opensettingpage");
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -106,7 +106,7 @@ export default {
   position: absolute;
   right: 15px;
   top: 20px;
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.6);
   font-size: 20px;
   cursor: pointer;
   transition: all 200ms ease-in-out;

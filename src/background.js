@@ -86,7 +86,9 @@ app.on("ready", async () => {
   createTray();
   // 设置开机启动
   let autoLaunch = new AutoLaunch({
-    name: "wall.paper"
+    name: "wall.paper",
+    path: process.env.APPIMAGE,
+    isHidden: true
   });
   autoLaunch.isEnabled().then(isEnabled => {
     if (!isEnabled) autoLaunch.enable();

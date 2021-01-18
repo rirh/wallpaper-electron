@@ -44,7 +44,7 @@ ipcMain.on("setpaper", (_, { path, i }) => {
     _.sender.send("reply-pro", res);
   })
     .then(loc => {
-      console.log(loc)
+      console.log(loc);
       setWallpaper(loc, () => {
         _.sender.send("reply-setpaper", { state: "done", i });
       });
@@ -59,33 +59,32 @@ ipcMain.on("setloginitem", (_, openAtLogin) => {
 });
 // 打开设置页面
 ipcMain.on("opensettingpage", async () => {
-  let win = new BrowserWindow({
-    width: 400,
-    height: 275,
-    // y: 0,
-    // x: screen.getCursorScreenPoint(),
-    transparent: true,
-    frame: false,
-    // show: false,
-    fullscreenable: false,
-    resizable: false,
+  let child = new BrowserWindow({
+    parent: BrowserWindow.getFocusedWindow(),
+    modal: true,
+    transparent:true,
+    backgroundColor:'#fff',
+    width: 300,
+    height: 300,
+    x: 0,
+    y: 0,
     webPreferences: {
       webSecurity: false,
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
       enableRemoteModule: true,
-      preload: require("path").join(__dirname, "preload.js")
     }
   });
+
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
-    await win.loadURL(`${process.env.WEBPACK_DEV_SERVER_URL}?query=setting`);
-    if (!process.env.IS_TEST) win.webContents.openDevTools();
+    await child.loadURL(`../docs/index.html`);
+    if (!process.env.IS_TEST) child.webContents.openDevTools();
   } else {
     createProtocol("app");
     // Load the index.html when not in development
-    win.loadURL("app://./index.html");
+    child.loadURL("app://./index.html");
   }
 });
 ipcMain.on("sendCanelDowload", () => {
