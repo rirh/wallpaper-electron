@@ -57,6 +57,12 @@ export default {
     },
   },
   methods: {
+    handleMinApp() {
+      window.remote.getCurrentWindow().minimize();
+    },
+    handleCloseApp() {
+      window.ipcRenderer.send("close-app");
+    },
     handleOpenSettingPage() {
       window.ipcRenderer.send("opensettingpage");
     },

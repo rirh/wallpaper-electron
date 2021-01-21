@@ -62,8 +62,8 @@ ipcMain.on("opensettingpage", async () => {
   let child = new BrowserWindow({
     parent: BrowserWindow.getFocusedWindow(),
     modal: true,
-    transparent:true,
-    backgroundColor:'#fff',
+    transparent: true,
+    backgroundColor: '#fff',
     width: 300,
     height: 300,
     x: 0,
@@ -100,4 +100,8 @@ ipcMain.on("autoChangeWall", _ => {
     }, 1000 * 60 * 60 * 24);
   };
   startTimeChange();
+});
+
+ipcMain.on("close-app", () => {
+  app.exit()
 });
