@@ -7,7 +7,6 @@
         :style="{ top: ismac ? '10px' : 0 }"
         :class="{ drag: !ismac }"
       >
-        <div class="bg"></div>
         <div class="tags no-drag">
           <div
             @click="$store.commit('updateCursor', 'latest')"
@@ -33,6 +32,14 @@
           class="setting el-icon-setting"
           @click="handleOpenSettingPage"
         ></i>
+        <div v-if="!ismac" class="title-bar">
+          <div class="title-item" @click="handleMinApp">
+            <i class="icon el-icon-minus"></i>
+          </div>
+          <div class="close title-item" @click="handleCloseApp">
+            <i class="icon el-icon-close"></i>
+          </div>
+        </div>
       </div>
       <router-view />
     </div>
@@ -43,21 +50,21 @@ import { mapState } from "vuex";
 export default {
   computed: {
     ...mapState({
-      cursor: state => state.cursor
+      cursor: (state) => state.cursor,
     }),
     ismac() {
       return window.process.platform === "darwin";
-    }
+    },
   },
   methods: {
     handleOpenSettingPage() {
       window.ipcRenderer.send("opensettingpage");
-    }
-  }
+    },
+  },
 };
 </script>
 
-<style scoped>
+<style lang="less" scoped>
 .app-main {
   position: relative;
 }
@@ -82,7 +89,7 @@ export default {
   overflow-y: scroll;
   overflow-x: hidden;
   border-radius: 5px;
-  background-color: #0F131C;
+  background-color: #0f131c;
 }
 .header {
   position: fixed;
@@ -91,16 +98,16 @@ export default {
   border-top-right-radius: 5px;
   border-top-left-radius: 5px;
   padding: 10px;
-  /* background-color: black; */
   color: rgba(255, 255, 255, 1);
-  width: 93%;
+  width: 94%;
   background-image: url("./assets/wall.paper.png");
   background-size: cover;
   background-repeat: no-repeat;
   height: 55px;
   background-position: 40% 0%;
   z-index: 1;
-  border-bottom: 1px solid #0F131C;
+  border-bottom: 1px solid #0f131c;
+  overflow: hidden;
 }
 .setting {
   position: absolute;
@@ -136,5 +143,36 @@ export default {
 }
 .tag-item-active {
   color: rgba(255, 255, 255, 0.9);
+}
+
+.title-bar {
+  position: absolute;
+  right: 0;
+  top: 0;
+  display: flex;
+  height: 25px;
+  width: 50px;
+  background-color: #000;
+  justify-content: flex-end;
+  align-items: center;
+  -webkit-app-region: drag;
+  .title-item {
+    font-size: 16px;
+    color: #666;
+    transition: all 200ms ease-in-out;
+    -webkit-app-region: no-drag;
+    height: 100%;
+    width: 40px;
+    margin-right: 5px;
+    display: grid;
+    place-items: center;
+  }
+  .title-item:hover .icon {
+    color: #fff;
+  }
+}
+.icon {
+  color: #666;
+  transition: color 200ms ease-in-out;
 }
 </style>

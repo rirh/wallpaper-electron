@@ -27,6 +27,8 @@
     "core-js": "^3.6.5",
     "electron-updater": "^4.3.5",
     "element-plus": "^1.0.1-beta.17",
+    "less": "^4.1.0",
+    "less-loader": "^7.2.1",
     "menubar": "^9.0.1",
     "nprogress": "^0.2.0",
     "vue": "^3.0.0",
