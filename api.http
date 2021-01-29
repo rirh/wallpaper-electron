@@ -23,3 +23,6 @@ Content-Type: application/json
 {
   "options":{"method":"get","data":{"type":1,"count": 1 },"dataType":"json"}
 }
+
+###
+GET https://pixabay.com/api/?key=16218458-614182f27e55d1de8dd763c5a&q=&per_page=3&page=1&orientation=horizontal HTTP/1.1

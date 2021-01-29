@@ -5,6 +5,7 @@ import pages from "./background.page";
 import createTray from "./background.tray";
 import createWindow from "./utils/pageFactoy";
 import createMainEvent from "./background.event.js";
+import store from "./electron-store";
 
 // import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 
@@ -37,6 +38,7 @@ app.on("ready", async () => {
   proload_page();
   const tray = createTray();
   createMainEvent(tray);
+  proload_setting();
 });
 app.on("browser-window-blur", () => {
   // const [win] = BrowserWindow.getAllWindows();
@@ -64,4 +66,18 @@ const proload_page = () => {
       createWindow(e);
     }
   });
+};
+
+const proload_setting = () => {
+  const default_dowload_path = `${require("os").homedir()}${
+    process.platform !== "darwin" ? "\\Downloads" : "/Downloads"
+  }`;
+  const default_is_random = false;
+  const default_random_time =`net-${1000 * 60 * 60}`;
+  const path = store.get("dowload-path") || default_dowload_path;
+  const is_random = store.get("is_random") || default_is_random;
+  const random_time = store.get("random_time") || default_random_time;
+  store.set("dowload-path", path);
+  store.set("is_random", is_random);
+  store.set("random_time", random_time);
 };

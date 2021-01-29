@@ -4,6 +4,7 @@ import wallpaper from "wallpaper";
 import util from "util";
 import { downloadPic, cancelDownloadPic } from "@/utils/file";
 import store from "./electron-store";
+import fs from "fs";
 // import path from "path";
 const exec = util.promisify(require("child_process").exec);
 const setWallpaper = (downloadloc, cb) => {
@@ -68,9 +69,9 @@ export default tray => {
     );
     const y = Math.round(trayBounds.y + trayBounds.height);
     win.setPosition(x + 125, y + 55, false);
-    // win.on("blur", () => {
-    //   win.hide();
-    // });
+    win.on("blur", () => {
+      win.hide();
+    });
     if (win.isVisible()) {
       win.hide();
     } else {
@@ -106,3 +107,30 @@ export default tray => {
     _.returnValue = app.getLoginItemSettings().openAtLogin;
   });
 };
+
+ipcMain.on("auto-change-image", (_, url) => {
+  downloadPic(url)
+    .then(loc => {
+      setWallpaper(loc, () => {
+        _.sender.send("reply-auto-change-image", { state: "done" });
+      });
+    })
+    .catch(err => {
+      _.sender.send("reply-auto-change-image", { state: "error", err });
+    });
+});
+
+ipcMain.on("auto-change-image-from-local", (_) => {
+  const hostdir = store.get("dowload-path");
+  fs.readdir(hostdir, (err, dirs) => {
+    const list = dirs.filter(e => e.match(/\.(png|jpe?g|gif|svg)(\?.*)?$/));
+    const len = list.length - 1;
+    const ran = parseInt(Math.random() * (len - 0 + 1) + 0, 10);
+    setWallpaper(
+      `${hostdir}${process.platform !== "darwin" ? "\\" : "/"}${list[ran]}`,
+      () => {
+        _.sender.send("reply-auto-change-image", { state: "done" });
+      }
+    );
+  });
+});

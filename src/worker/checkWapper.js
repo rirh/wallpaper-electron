@@ -1,5 +1,19 @@
+let timer;
 onmessage = e => {
-  const url = e.data;
+  const { url, is_random, selectedtime } = e.data;
+  console.log(url, is_random, selectedtime);
+  const [type, time] = selectedtime.split("-");
+  if (time) clearTimeout(timer);
+  timer = setTimeout(() => {
+    if (type === "net") {
+      fetch_image(url);
+    } else {
+      postMessage(selectedtime);
+    }
+  }, Number(time));
+};
+
+function fetch_image(url) {
   const data = JSON.stringify({
     options: {
       method: "get",
@@ -13,15 +27,17 @@ onmessage = e => {
 
   const xhr = new XMLHttpRequest();
   xhr.withCredentials = true;
-
   xhr.addEventListener("readystatechange", function() {
     if (this.readyState === this.DONE) {
-      console.log(this.responseText);
+      const data = JSON.parse(this.responseText);
+      data.largeImageURL && postMessage(data.largeImageURL);
+    } else {
+      setTimeout(() => {
+        fetch_image();
+      }, 1000 * 60 * 5);
     }
   });
-
   xhr.open("POST", url);
   xhr.setRequestHeader("content-type", "application/json");
-
   xhr.send(data);
-};
+}
