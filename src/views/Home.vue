@@ -97,23 +97,16 @@ export default {
   mounted() {
     this.fetchList();
     window.ipcRenderer.send("autoChangeWall");
-    window.ipcRenderer.on("reply-auto-change-wall", () => {
-      fetch(`${this.url}`, {
-        method: "POST",
-        body: JSON.stringify({
-          options: {
-            method: "get",
-            data: { type: 1, count: 1 },
-            dataType: "json"
-          }
-        })
-      }).then(async response => {
-        const {
-          data: [item]
-        } = await response.json();
-        window.ipcRenderer.send("setpaper", { path: item.urls.full });
-      });
+    window.ipcRenderer.on("reply-auto-change-wall", () => {});
+    // 自动切换壁纸
+    const checkwapper = new Worker("../worker/checkWapper.js", {
+      type: "module"
     });
+    checkwapper.postMessage(this.url);
+    checkwapper.onmessage = function(e) {
+      console.log("Message received from worker", e);
+    };
+
     window.ipcRenderer.on("reply-setpaper", (event, data) => {
       const { i } = data;
       this.lists[i] = { ...this.lists[i], loading: false };

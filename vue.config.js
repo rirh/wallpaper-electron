@@ -1,5 +1,10 @@
 const WorkerPlugin = require("worker-plugin");
 module.exports = {
+  // 配置多页面
+  pages: {
+    index: "src/main.js",
+    setting: "src/setting.js"
+  },
   configureWebpack: {
     plugins: [new WorkerPlugin()],
     devtool: "source-map"
