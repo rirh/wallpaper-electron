@@ -4,7 +4,7 @@ protocol.registerSchemesAsPrivileged([
   { scheme: "app", privileges: { secure: true, standard: true } }
 ]);
 export default function({ name, options }) {
-  const isDevelopment = process.env.NODE_ENV !== "production";
+  // const isDevelopment = process.env.NODE_ENV !== "production";
   // Create the browser window.
   const window = new BrowserWindow({
     ...options,
@@ -17,7 +17,7 @@ export default function({ name, options }) {
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
       enableRemoteModule: true,
       preload: require("path").join(__dirname, "preload.js"),
-      devTools: isDevelopment
+      devTools: true
     }
   });
   store.set(name, window.id);
