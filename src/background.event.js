@@ -109,6 +109,11 @@ export default tray => {
 };
 
 ipcMain.on("auto-change-image", (_, url) => {
+  let is_random = store.get("is_random");
+  if (!is_random) {
+    _.sender.send("reply-auto-change-image", { state: "done" });
+    return;
+  }
   downloadPic(url)
     .then(loc => {
       setWallpaper(loc, () => {
@@ -120,8 +125,13 @@ ipcMain.on("auto-change-image", (_, url) => {
     });
 });
 
-ipcMain.on("auto-change-image-from-local", (_) => {
+ipcMain.on("auto-change-image-from-local", _ => {
   const hostdir = store.get("dowload-path");
+  let is_random = store.get("is_random");
+  if (!is_random) {
+    _.sender.send("reply-auto-change-image", { state: "done" });
+    return;
+  }
   fs.readdir(hostdir, (err, dirs) => {
     const list = dirs.filter(e => e.match(/\.(png|jpe?g|gif|svg)(\?.*)?$/));
     const len = list.length - 1;

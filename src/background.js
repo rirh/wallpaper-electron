@@ -1,6 +1,6 @@
 "use strict";
 import { app } from "electron";
-
+import { autoUpdater } from "electron-updater";
 import pages from "./background.page";
 import createTray from "./background.tray";
 import createWindow from "./utils/pageFactoy";
@@ -35,10 +35,11 @@ app.on("browser-window-blur", () => {
 // Some APIs can only be used after this event occurs.
 app.on("ready", async () => {
   //
+  proload_setting();
   proload_page();
   const tray = createTray();
   createMainEvent(tray);
-  proload_setting();
+  autoUpdater.checkForUpdatesAndNotify();
 });
 app.on("browser-window-blur", () => {
   // const [win] = BrowserWindow.getAllWindows();
@@ -59,7 +60,9 @@ if (isDevelopment) {
     });
   }
 }
-
+/**
+ * 预加载页面但是不显示
+ */
 const proload_page = () => {
   pages().forEach(e => {
     if (e.proload) {
@@ -67,13 +70,15 @@ const proload_page = () => {
     }
   });
 };
-
+/**
+ * 设置默认参数
+ */
 const proload_setting = () => {
   const default_dowload_path = `${require("os").homedir()}${
     process.platform !== "darwin" ? "\\Downloads" : "/Downloads"
   }`;
   const default_is_random = false;
-  const default_random_time =`net-${1000 * 60 * 60}`;
+  const default_random_time = `net-${1000 * 60 * 60}`;
   const path = store.get("dowload-path") || default_dowload_path;
   const is_random = store.get("is_random") || default_is_random;
   const random_time = store.get("random_time") || default_random_time;

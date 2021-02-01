@@ -1,7 +1,6 @@
 import path from "path";
 const pages = () => {
   const { screen } = require("electron");
-  console.log(Math.floor(screen.getCursorScreenPoint().x - 282 / 2 + 40));
   return [
     {
       name: "index",
@@ -10,7 +9,7 @@ const pages = () => {
         width: 290,
         height: 610,
         y: 0,
-        x: 0,
+        x: screen.getCursorScreenPoint().x / 2 - 282 / 2,
         transparent: true,
         frame: false,
         show: false,

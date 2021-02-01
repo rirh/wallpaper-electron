@@ -1,4 +1,4 @@
-import { BrowserWindow, protocol } from "electron";
+import { BrowserWindow, protocol, createProtocol } from "electron";
 import store from "../electron-store";
 protocol.registerSchemesAsPrivileged([
   { scheme: "app", privileges: { secure: true, standard: true } }
@@ -26,6 +26,7 @@ export default function({ name, options }) {
     window.loadURL(`${process.env.WEBPACK_DEV_SERVER_URL}${name}`);
     if (!process.env.IS_TEST) window.webContents.openDevTools();
   } else {
+    createProtocol("app");
     // Load the index.html when not in development
     window.loadURL(`app://./${name}.html`);
   }
