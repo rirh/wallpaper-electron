@@ -1,6 +1,5 @@
 import { createStore } from "vuex";
-
-export default createStore({
+const store = createStore({
   state: {
     cursor: "latest"
   },
@@ -12,3 +11,5 @@ export default createStore({
   actions: {},
   modules: {}
 });
+
+export default store;

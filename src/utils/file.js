@@ -6,6 +6,8 @@ const fs = require("fs");
 const path = require("path");
 const request = require("request");
 const webp = require("webp-converter");
+import store from "../electron-store";
+
 /**
  * @type {Object} 保存当前的请求对象
  */
@@ -40,9 +42,7 @@ export function mkdirSync(dirname) {
 export const downloadPic = async function(src, cb) {
   return new Promise((resolve, reject) => {
     // 创建文件夹
-    const hostdir = `${require("os").homedir()}${
-      process.platform !== "darwin" ? "\\Downloads" : "/Downloads"
-    }`;
+    const hostdir = store.get("dowload-path");
     // 文件名
     const fileName = src;
     mkdirSync(hostdir);

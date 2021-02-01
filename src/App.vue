@@ -28,7 +28,7 @@
           </div>
         </div>
         <i
-          v-show="false"
+          v-show="true"
           class="setting el-icon-setting"
           @click="handleOpenSettingPage"
         ></i>

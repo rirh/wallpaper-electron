@@ -1,14 +1,16 @@
 "use strict";
 import path from "path";
 import { app, Tray, Menu, BrowserWindow } from "electron";
+import store from "./electron-store";
 let tray = null;
-export default function () {
+export default function() {
   // eslint-disable-next-line no-undef
   const iconPath = path.join(__static, "38x38@2x.png");
   tray = new Tray(iconPath);
   tray.setToolTip(`${app.getName()}`);
+  const winid = store.get("index");
+  const win = BrowserWindow.fromId(winid);
   const getWindowPosition = () => {
-    const [win] = BrowserWindow.getAllWindows();
     const windowBounds = win.getBounds();
     const trayBounds = tray.getBounds();
     const x = Math.round(
@@ -17,7 +19,6 @@ export default function () {
     const y = Math.round(trayBounds.y + trayBounds.height);
     return { x, y };
   };
-  const [win] = BrowserWindow.getAllWindows();
   if (process.platform === "darwin") {
     const position = getWindowPosition();
     win.setPosition(position.x, position.y, false);
@@ -26,26 +27,25 @@ export default function () {
   win.focus();
   if (process.platform !== "darwin") {
     const contextMenu = Menu.buildFromTemplate([
-      // {
-      //   label: `开机启动：${
-      //     app.getLoginItemSettings().openAtLogin ? "开" : "关"
-      //   }`,
-      //   click: function() {
-      //     app.setLoginItemSettings({
-      //       openAtLogin: !app.getLoginItemSettings().openAtLogin
-      //     });
-      //   }
-      // },
+      {
+        label: "开机自启",
+        type: "checkbox",
+        checked: app.getLoginItemSettings().openAtLogin,
+        click: item => {
+          const { checked } = item;
+          app.setLoginItemSettings({ openAtLogin: checked });
+        }
+      },
       {
         label: "最小化",
-        click: function () {
-          const [win] = BrowserWindow.getAllWindows()
-          win.hide()
+        click: function() {
+          const [win] = BrowserWindow.getAllWindows();
+          win.hide();
         }
       },
       {
         label: "退出",
-        click: function () {
+        click: function() {
           app.quit();
         }
       }
@@ -54,7 +54,6 @@ export default function () {
   }
   tray.on("click", e => {
     e.preventDefault();
-    const [win] = BrowserWindow.getAllWindows();
     if (win.isVisible()) {
       win.hide();
     } else {

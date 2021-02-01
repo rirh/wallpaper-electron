@@ -13,4 +13,16 @@ get https://api.unsplash.com/photos?page=1&per_page=3 HTTP/1.1
 Authorization: Client-ID 6acf679c2c2e383123a9c1aa1cd719ca041f1484463cd3e109eb14b57ce9c953
 
 ###
-GET https://wallhaven.cc/api/v1/search?per_page=10&page=1&order_by=oldest HTTP/1.1
+GET https://wallhaven.cc/api/v1/random  HTTP/1.1
+Content-Type: application/json
+
+###
+POST https://f794c6c4-6af8-4d74-b405-d93ed7968c0f.bspapp.com/http/wall HTTP/1.1
+Content-Type: application/json
+
+{
+  "options":{"method":"get","data":{"type":1,"count": 1 },"dataType":"json"}
+}
+
+###
+GET https://pixabay.com/api/?key=16218458-614182f27e55d1de8dd763c5a&q=&per_page=3&page=1&orientation=horizontal HTTP/1.1

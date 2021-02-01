@@ -1,6 +1,6 @@
 {
   "name": "wall.paper",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "wallpaper for mac & win",
   "license": "MIT",
   "private": true,
@@ -25,10 +25,11 @@
   "dependencies": {
     "auto-launch": "^5.0.5",
     "core-js": "^3.6.5",
+    "electron-store": "^7.0.0",
     "electron-updater": "^4.3.5",
     "element-plus": "^1.0.1-beta.17",
     "less": "^4.1.0",
-    "less-loader": "^7.2.1",
+    "less-loader": "^7.3.0",
     "menubar": "^9.0.1",
     "nprogress": "^0.2.0",
     "vue": "^3.0.0",

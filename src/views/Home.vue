@@ -59,6 +59,19 @@
 <script>
 // @ is an alias to /src
 import { mapState } from "vuex";
+import store from "../electron-store";
+const checkwapper = new Worker("../worker/checkWapper.js", {
+  type: "module"
+});
+checkwapper.onmessage = function(e) {
+  const { data } = e;
+  let selectedtime = store.get("random_time");
+  if (data !== selectedtime) {
+    window.ipcRenderer.send("auto-change-image", data);
+  } else {
+    window.ipcRenderer.send("auto-change-image-from-local");
+  }
+};
 export default {
   name: "Home",
   computed: {
@@ -96,23 +109,9 @@ export default {
   },
   mounted() {
     this.fetchList();
-    window.ipcRenderer.send("autoChangeWall");
-    window.ipcRenderer.on("reply-auto-change-wall", () => {
-      fetch(`${this.url}`, {
-        method: "POST",
-        body: JSON.stringify({
-          options: {
-            method: "get",
-            data: { type: 1, count: 1 },
-            dataType: "json"
-          }
-        })
-      }).then(async response => {
-        const {
-          data: [item]
-        } = await response.json();
-        window.ipcRenderer.send("setpaper", { path: item.urls.full });
-      });
+    this.auto_checkout();
+    window.ipcRenderer.on("reply-auto-change-image", () => {
+      this.auto_checkout();
     });
     window.ipcRenderer.on("reply-setpaper", (event, data) => {
       const { i } = data;
@@ -132,6 +131,12 @@ export default {
     });
   },
   methods: {
+    auto_checkout() {
+      // 自动切换壁纸
+      let is_random = store.get("is_random");
+      let selectedtime = store.get("random_time");
+      checkwapper.postMessage({ url: this.url, is_random, selectedtime });
+    },
     handleReDowload() {
       window.ipcRenderer.send("sendCanelDowload");
       this.handleSetWapper(

@@ -15,7 +15,6 @@ header = {
 
 
 def downloadpic(urlinfo):
-
     for (name, url) in urlinfo.items():
         # savepath = r'C:UsersAdministratorPictures%s' % name
         content = se.get(url, headers=header).content
