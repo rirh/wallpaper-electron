@@ -28,12 +28,15 @@
           </div>
         </div>
         <i
-          v-show="true"
+          v-show="ismac"
           class="setting el-icon-setting"
           @click="handleOpenSettingPage"
         ></i>
         <div v-if="!ismac" class="title-bar">
-          <div class="title-item" @click="handleMinApp">
+          <div class="title-item" @click="handleOpenSettingPage">
+            <i class="icon el-icon-setting"></i>
+          </div>
+           <div class="title-item" @click="handleMinApp">
             <i class="icon el-icon-minus"></i>
           </div>
           <div class="close title-item" @click="handleCloseApp">

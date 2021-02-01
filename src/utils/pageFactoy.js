@@ -27,7 +27,7 @@ export default function({ name, options }) {
     if (!process.env.IS_TEST) window.webContents.openDevTools();
   } else {
     // Load the index.html when not in development
-    window.loadURL(`app://./${name}.htnm`);
+    window.loadURL(`app://./${name}.html`);
   }
   return window;
 }
