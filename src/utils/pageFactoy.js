@@ -1,9 +1,7 @@
-import { BrowserWindow, protocol, createProtocol } from "electron";
+import { BrowserWindow, createProtocol } from "electron";
 import store from "../electron-store";
-protocol.registerSchemesAsPrivileged([
-  { scheme: "app", privileges: { secure: true, standard: true } }
-]);
-export default function({ name, options }) {
+
+export default function ({ name, options }) {
   // const isDevelopment = process.env.NODE_ENV !== "production";
   // Create the browser window.
   const window = new BrowserWindow({

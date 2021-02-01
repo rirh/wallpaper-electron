@@ -1,5 +1,5 @@
 "use strict";
-import { app } from "electron";
+import { app, protocol } from "electron";
 import { autoUpdater } from "electron-updater";
 import pages from "./background.page";
 import createTray from "./background.tray";
@@ -10,6 +10,9 @@ import store from "./electron-store";
 // import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
+protocol.registerSchemesAsPrivileged([
+  { scheme: "app", privileges: { secure: true, standard: true } }
+]);
 // Quit when all windows are closed.
 app.on("window-all-closed", () => {
   console.log("window-all-closed");
@@ -74,9 +77,8 @@ const proload_page = () => {
  * 设置默认参数
  */
 const proload_setting = () => {
-  const default_dowload_path = `${require("os").homedir()}${
-    process.platform !== "darwin" ? "\\Downloads" : "/Downloads"
-  }`;
+  const default_dowload_path = `${require("os").homedir()}${process.platform !== "darwin" ? "\\Downloads" : "/Downloads"
+    }`;
   const default_is_random = false;
   const default_random_time = `net-${1000 * 60 * 60}`;
   const path = store.get("dowload-path") || default_dowload_path;
