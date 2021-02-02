@@ -9,7 +9,7 @@ const pages = () => {
       options: {
         width: 290,
         height: 610,
-        y: 0,
+        y: screen.getCursorScreenPoint().y / 2,
         x: screen.getCursorScreenPoint().x / 2 - 282 / 2,
         transparent: true,
         frame: false,
@@ -22,7 +22,7 @@ const pages = () => {
           webSecurity: false,
           nodeIntegration: true,
           enableRemoteModule: true,
-          preload: path.join(__static, "preload.js"),
+          preload: require("path").join(__dirname, "preload.js"),
           devTools: isDevelopment
         }
       }
@@ -33,10 +33,10 @@ const pages = () => {
       options: {
         width: 200,
         height: 300,
-        y: 75,
-        show: false,
+        y: screen.getCursorScreenPoint().y / 2,
+        show: true,
         transparent: true,
-        x: 0,
+        x: screen.getCursorScreenPoint().x / 2 - 282 / 2,
         frame: false,
         icon: path.join(__static, "icon.png")
       }

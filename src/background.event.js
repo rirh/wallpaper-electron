@@ -70,6 +70,11 @@ export default tray => {
     );
     const y = Math.round(trayBounds.y + trayBounds.height);
     win.setPosition(x + 125, y + 55, false);
+    if (process.platform === "win32") {
+      const { screen } = require("electron");
+      win.setAlwaysOnTop(true)
+      win.setPosition(screen.getCursorScreenPoint().x / 2 - 100, screen.getCursorScreenPoint().y / 2 - 150, false);
+    }
     win.on("blur", () => {
       win.hide();
     });

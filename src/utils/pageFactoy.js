@@ -2,11 +2,10 @@ import { BrowserWindow } from "electron";
 import store from "../electron-store";
 const isDevelopment = process.env.NODE_ENV !== "production";
 
-export default function({ name, options }) {
+export default function ({ name, options }) {
   // const isDevelopment = process.env.NODE_ENV !== "production";
   // Create the browser window.
   const window = new BrowserWindow({
-    ...options,
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
@@ -17,7 +16,8 @@ export default function({ name, options }) {
       enableRemoteModule: true,
       preload: require("path").join(__dirname, "preload.js"),
       devTools: isDevelopment
-    }
+    },
+    ...options,
   });
   store.set(name, window.id);
   if (process.env.WEBPACK_DEV_SERVER_URL) {

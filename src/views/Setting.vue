@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="box">&nbsp;</div>
-    <div class="app">
+    <div v-if="ismac" class="box">&nbsp;</div>
+    <div class="app" :style="{ height: `calc(100vh - ${ismac ? 12 : 0}px)` }">
       <div class="wapper">
         <div class="row-header">
           <span>v{{ version }}</span>
@@ -50,9 +50,7 @@
         </div>
         <br />
         <br />
-        <div>
-          壁纸存储文件夹
-        </div>
+        <div>壁纸存储文件夹</div>
         <br />
         <div class="row" :title="path">
           <input v-model="path" class="row-input" type="text" readonly />
@@ -78,7 +76,7 @@ export default {
       start: false,
       is_random: false,
       path: "",
-      selectedtime: ""
+      selectedtime: "",
     };
   },
   mounted() {
@@ -96,16 +94,16 @@ export default {
     hand_select_file_dir() {
       window.remote.dialog
         .showOpenDialog({
-          properties: ["openDirectory"]
+          properties: ["openDirectory"],
         })
-        .then(result => {
+        .then((result) => {
           if (result.filePaths.length) {
             const [path] = result.filePaths;
             this.path = path;
             store.set("dowload-path", path);
           }
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     },
@@ -129,8 +127,8 @@ export default {
       window.remote.shell.openExternal(
         "https://github.com/hiover/wallpaper-electron/issues"
       );
-    }
-  }
+    },
+  },
 };
 </script>
 

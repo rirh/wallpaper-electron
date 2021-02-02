@@ -20,7 +20,7 @@ module.exports = {
       nodeIntegration: true,
       preload: "src/preload.js",
       builderOptions: {
-        productName: "wall.paper",
+        productName: "Will Paper",
         appId: "com.wall.paper",
         publish: ["github"],
         dmg: {
