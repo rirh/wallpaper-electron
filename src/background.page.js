@@ -34,7 +34,7 @@ const pages = () => {
         width: 200,
         height: 300,
         y: screen.getCursorScreenPoint().y / 2,
-        show: true,
+        show: false,
         transparent: true,
         x: screen.getCursorScreenPoint().x / 2 - 282 / 2,
         frame: false,

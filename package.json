@@ -18,8 +18,8 @@
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps",
     "electron:generate-icons": "electron-icon-builder --input=./public/icon.png --output=build --flatten",
-    "releases:win": "set GH_TOKEN=792cad124d48af43e9757ffa3d32dd91aeab962a && yarn electron:build -p always",
-    "releases:mac": "export GH_TOKEN=792cad124d48af43e9757ffa3d32dd91aeab962a && yarn electron:build -p always"
+    "releases:win": "set GH_TOKEN=93a54408b36185c007d18dc81ee69e5781b17b66 && yarn electron:build -p always",
+    "releases:mac": "export GH_TOKEN=93a54408b36185c007d18dc81ee69e5781b17b66 && yarn electron:build -p always"
   },
   "main": "background.js",
   "dependencies": {
