@@ -1,4 +1,5 @@
 import path from "path";
+const isDevelopment = process.env.NODE_ENV !== "production";
 const pages = () => {
   const { screen } = require("electron");
   return [
@@ -22,7 +23,7 @@ const pages = () => {
           nodeIntegration: true,
           enableRemoteModule: true,
           preload: path.join(__static, "preload.js"),
-          devTools: true
+          devTools: isDevelopment
         }
       }
     },

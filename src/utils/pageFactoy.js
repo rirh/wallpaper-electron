@@ -1,7 +1,8 @@
 import { BrowserWindow } from "electron";
 import store from "../electron-store";
+const isDevelopment = process.env.NODE_ENV !== "production";
 
-export default function ({ name, options }) {
+export default function({ name, options }) {
   // const isDevelopment = process.env.NODE_ENV !== "production";
   // Create the browser window.
   const window = new BrowserWindow({
@@ -15,7 +16,7 @@ export default function ({ name, options }) {
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
       enableRemoteModule: true,
       preload: require("path").join(__dirname, "preload.js"),
-      devTools: true
+      devTools: isDevelopment
     }
   });
   store.set(name, window.id);
