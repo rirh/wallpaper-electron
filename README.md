@@ -17,8 +17,13 @@
 <p>
 <br/>
 <br/>
-<a href="https://static-f794c6c4-6af8-4d74-b405-d93ed7968c0f.bspapp.com/" target="_blank">
-      <img alt="mac" width="200px" height="450px"  src="https://vkceyugu.cdn.bspapp.com/VKCEYUGU-aliyun-x0zn4w1xdkfo451f35/3677d060-4b2f-11eb-b680-7980c8a877b8.png">
+<a href="http://paper.tigerzh.com" target="_blank">
+      <img alt="mac"  src="./docs/home.png">
+</a>
+<br/>
+<br/>
+<a href="http://paper.tigerzh.com" target="_blank">
+      <img alt="mac"  src="./docs/setting.png">
 </a>
 <br/>
 <br/>

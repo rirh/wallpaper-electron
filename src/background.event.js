@@ -1,10 +1,11 @@
 "use strict";
-import { app, ipcMain, BrowserWindow } from "electron";
-import wallpaper from "wallpaper";
-import util from "util";
-import { downloadPic, cancelDownloadPic } from "@/utils/file";
-import store from "./electron-store";
 import fs from "fs";
+import util from "util";
+import wallpaper from "wallpaper";
+import store from "./electron-store";
+import { app, ipcMain, BrowserWindow } from "electron";
+import { autoUpdater } from "electron-updater";
+import { downloadPic, cancelDownloadPic } from "@/utils/file";
 // import path from "path";
 const exec = util.promisify(require("child_process").exec);
 const setWallpaper = (downloadloc, cb) => {
@@ -123,6 +124,7 @@ ipcMain.on("auto-change-image", (_, url) => {
     .catch(err => {
       _.sender.send("reply-auto-change-image", { state: "error", err });
     });
+  autoUpdater.checkForUpdatesAndNotify();
 });
 
 ipcMain.on("auto-change-image-from-local", _ => {
@@ -143,4 +145,5 @@ ipcMain.on("auto-change-image-from-local", _ => {
       }
     );
   });
+  autoUpdater.checkForUpdatesAndNotify();
 });

@@ -1,6 +1,6 @@
 {
   "name": "wall.paper",
-  "version": "0.0.7",
+  "version": "0.0.9",
   "description": "wallpaper for mac & win",
   "license": "MIT",
   "private": true,
@@ -18,8 +18,8 @@
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps",
     "electron:generate-icons": "electron-icon-builder --input=./public/icon.png --output=build --flatten",
-    "releases:win": "set GH_TOKEN=b56801d1fc27214e43d6cef21c935d26e0407d67 && yarn electron:build -p always",
-    "releases:mac": "export GH_TOKEN=b56801d1fc27214e43d6cef21c935d26e0407d67 && yarn electron:build -p always"
+    "releases:win": "set GH_TOKEN=bac5cd1fa6a09fc420090e709cf4f0f6a90f7bdd && yarn electron:build -p always",
+    "releases:mac": "export GH_TOKEN=bac5cd1fa6a09fc420090e709cf4f0f6a90f7bdd && yarn electron:build -p always"
   },
   "main": "background.js",
   "dependencies": {
