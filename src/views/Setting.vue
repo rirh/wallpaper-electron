@@ -79,6 +79,11 @@ export default {
       selectedtime: "",
     };
   },
+  computed: {
+    ismac() {
+      return window.process.platform === "darwin";
+    },
+  },
   mounted() {
     const val = window.ipcRenderer.sendSync("update-auto-lunch-app", "");
     this.start = val;
