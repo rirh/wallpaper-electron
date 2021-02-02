@@ -1,4 +1,4 @@
-import { BrowserWindow, createProtocol } from "electron";
+import { BrowserWindow } from "electron";
 import store from "../electron-store";
 
 export default function ({ name, options }) {
@@ -24,7 +24,6 @@ export default function ({ name, options }) {
     window.loadURL(`${process.env.WEBPACK_DEV_SERVER_URL}${name}`);
     if (!process.env.IS_TEST) window.webContents.openDevTools();
   } else {
-    createProtocol("app");
     // Load the index.html when not in development
     window.loadURL(`app://./${name}.html`);
   }

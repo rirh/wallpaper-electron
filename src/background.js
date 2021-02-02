@@ -1,5 +1,6 @@
 "use strict";
 import { app, protocol } from "electron";
+import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import { autoUpdater } from "electron-updater";
 import pages from "./background.page";
 import createTray from "./background.tray";
@@ -36,13 +37,16 @@ app.on("browser-window-blur", () => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on("ready", async () => {
+app.on("ready", () => {
+  if (!process.env.WEBPACK_DEV_SERVER_URL) {
+    createProtocol("app");
+    autoUpdater.checkForUpdatesAndNotify();
+  }
   //
   proload_setting();
   proload_page();
   const tray = createTray();
   createMainEvent(tray);
-  autoUpdater.checkForUpdatesAndNotify();
 });
 app.on("browser-window-blur", () => {
   // const [win] = BrowserWindow.getAllWindows();
@@ -77,8 +81,9 @@ const proload_page = () => {
  * 设置默认参数
  */
 const proload_setting = () => {
-  const default_dowload_path = `${require("os").homedir()}${process.platform !== "darwin" ? "\\Downloads" : "/Downloads"
-    }`;
+  const default_dowload_path = `${require("os").homedir()}${
+    process.platform !== "darwin" ? "\\Downloads" : "/Downloads"
+  }`;
   const default_is_random = false;
   const default_random_time = `net-${1000 * 60 * 60}`;
   const path = store.get("dowload-path") || default_dowload_path;
