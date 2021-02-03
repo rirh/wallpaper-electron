@@ -26,3 +26,6 @@ Content-Type: application/json
 
 ###
 GET https://pixabay.com/api/?key=16218458-614182f27e55d1de8dd763c5a&q=&per_page=3&page=1&orientation=horizontal HTTP/1.1
+###
+
+GET https://8597e222-5d79-4aba-8825-7d8c02733833.bspapp.com/http/iso HTTP/1.1
