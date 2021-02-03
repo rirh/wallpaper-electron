@@ -72,8 +72,12 @@ export default tray => {
     win.setPosition(x + 125, y + 55, false);
     if (process.platform === "win32") {
       const { screen } = require("electron");
-      win.setAlwaysOnTop(true)
-      win.setPosition(screen.getCursorScreenPoint().x / 2 - 100, screen.getCursorScreenPoint().y / 2 - 150, false);
+      win.setAlwaysOnTop(true);
+      win.setPosition(
+        screen.getCursorScreenPoint().x / 2 - 100,
+        screen.getCursorScreenPoint().y / 2 - 150,
+        false
+      );
     }
     win.on("blur", () => {
       win.hide();
@@ -116,11 +120,12 @@ export default tray => {
 
 ipcMain.on("auto-change-image", (_, url) => {
   let is_random = store.get("is_random");
+  console.log("auto-change-image", is_random, url);
   if (!is_random) {
     _.sender.send("reply-auto-change-image", { state: "done" });
     return;
   }
-  downloadPic(url)
+  downloadPic(url, () => {})
     .then(loc => {
       setWallpaper(loc, () => {
         _.sender.send("reply-auto-change-image", { state: "done" });
@@ -135,6 +140,7 @@ ipcMain.on("auto-change-image", (_, url) => {
 ipcMain.on("auto-change-image-from-local", _ => {
   const hostdir = store.get("dowload-path");
   let is_random = store.get("is_random");
+  console.log("auto-change-image-from-local", is_random);
   if (!is_random) {
     _.sender.send("reply-auto-change-image", { state: "done" });
     return;

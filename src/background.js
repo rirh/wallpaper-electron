@@ -1,5 +1,5 @@
 "use strict";
-import { app, protocol } from "electron";
+import { app, protocol, BrowserWindow } from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import { autoUpdater } from "electron-updater";
 import pages from "./background.page";
@@ -47,10 +47,16 @@ app.on("ready", () => {
   proload_page();
   const tray = createTray();
   createMainEvent(tray);
-});
-app.on("browser-window-blur", () => {
-  // const [win] = BrowserWindow.getAllWindows();
-  // win.hide();
+  //  失去焦点设置也消失
+  const winid = store.get("index");
+  const win = BrowserWindow.fromId(winid);
+  win.on("hide", () => {
+    if (!win.isVisible()) {
+      const swins = store.get("setting");
+      const swin = BrowserWindow.fromId(swins);
+      swin.hide();
+    }
+  });
 });
 
 // Exit cleanly on request from parent process in development mode.

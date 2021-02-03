@@ -57,6 +57,8 @@ export default function() {
     if (win.isVisible()) {
       win.hide();
     } else {
+      const position = getWindowPosition();
+      win.setPosition(position.x, position.y, false);
       win.show();
     }
   });

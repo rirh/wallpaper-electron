@@ -66,6 +66,7 @@ const checkwapper = new Worker("../worker/checkWapper.js", {
 checkwapper.onmessage = function(e) {
   const { data } = e;
   let selectedtime = store.get("random_time");
+  console.log("hometime:", selectedtime);
   if (data !== selectedtime) {
     window.ipcRenderer.send("auto-change-image", data);
   } else {

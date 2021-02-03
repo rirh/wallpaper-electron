@@ -6,14 +6,15 @@ onmessage = e => {
   if (time) clearTimeout(timer);
   timer = setTimeout(() => {
     if (type === "net") {
-      fetch_image(url);
+      fetch_image(url, selectedtime);
     } else {
       postMessage(selectedtime);
     }
   }, Number(time));
+  // }, 1000 * 10);
 };
 
-function fetch_image(url) {
+function fetch_image(url, selectedtime) {
   const data = JSON.stringify({
     options: {
       method: "get",
@@ -24,6 +25,7 @@ function fetch_image(url) {
       dataType: "json"
     }
   });
+  console.log("worker time:", selectedtime);
 
   const xhr = new XMLHttpRequest();
   xhr.withCredentials = true;
@@ -34,7 +36,7 @@ function fetch_image(url) {
     } else {
       setTimeout(() => {
         fetch_image();
-      }, 1000 * 60 * 5);
+      }, 1000 * 60 * 1);
     }
   });
   xhr.open("POST", url);
