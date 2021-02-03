@@ -74,8 +74,8 @@ export default tray => {
       const { screen } = require("electron");
       win.setAlwaysOnTop(true);
       win.setPosition(
-        screen.getCursorScreenPoint().x / 2 - 100,
-        screen.getCursorScreenPoint().y / 2 - 150,
+        Math.floor(screen.getCursorScreenPoint().x / 2 ),
+        Math.floor(screen.getCursorScreenPoint().y / 2),
         false
       );
     }

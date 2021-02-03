@@ -1,11 +1,17 @@
 <template>
   <div>
     <div v-if="ismac" class="box">&nbsp;</div>
-    <div class="app" :style="{ height: `calc(100vh - ${ismac ? 12 : 0}px)` }">
+    <div
+      class="app"
+      :class="{ drag: !ismac }"
+      :style="{ height: `calc(100vh - ${ismac ? 12 : 0}px)` }"
+    >
       <div class="wapper">
         <div class="row-header">
           <span>v{{ version }}</span>
-          <span @click="handle_quite" class="btn">退出</span>
+          <span :class="{ 'no-drag': !ismac }" @click="handle_quite" class="btn"
+            >退出</span
+          >
         </div>
         <br />
         <div class="row">
@@ -153,6 +159,13 @@ body {
   user-select: none;
   color: #999;
 }
+
+.drag {
+  -webkit-app-region: drag;
+}
+.no-drag {
+  -webkit-app-region: no-drag;
+}
 .box {
   height: 12px;
   position: relative;
@@ -182,6 +195,7 @@ body {
   align-items: center;
   height: 20px;
   justify-content: flex-start;
+  -webkit-app-region: no-drag;
 }
 .btn {
   cursor: pointer;
@@ -236,6 +250,7 @@ body {
   align-items: center;
   height: 35px;
   border-top: 1px solid rgb(41, 40, 40);
+  -webkit-app-region: no-drag;
 }
 .end span {
   flex: 1;

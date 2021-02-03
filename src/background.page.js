@@ -9,6 +9,8 @@ const pages = () => {
       options: {
         width: 290,
         height: 610,
+        maximizable:false,
+
         y: screen.getCursorScreenPoint().y / 2,
         x: screen.getCursorScreenPoint().x / 2 - 282 / 2,
         transparent: true,
@@ -33,6 +35,8 @@ const pages = () => {
       options: {
         width: 200,
         height: 300,
+        maximizable:false,
+        
         y: screen.getCursorScreenPoint().y / 2,
         show: false,
         transparent: true,

@@ -3,7 +3,7 @@ import path from "path";
 import { app, Tray, Menu, BrowserWindow } from "electron";
 import store from "./electron-store";
 let tray = null;
-export default function() {
+export default function () {
   // eslint-disable-next-line no-undef
   const iconPath = path.join(__static, "38x38@2x.png");
   tray = new Tray(iconPath);
@@ -13,10 +13,10 @@ export default function() {
   const getWindowPosition = () => {
     const windowBounds = win.getBounds();
     const trayBounds = tray.getBounds();
-    const x = Math.round(
+    const x = Math.floor(
       trayBounds.x + trayBounds.width / 2 - windowBounds.width / 2
     );
-    const y = Math.round(trayBounds.y + trayBounds.height);
+    const y = Math.floor(trayBounds.y + trayBounds.height);
     return { x, y };
   };
   if (process.platform === "darwin") {
@@ -38,14 +38,14 @@ export default function() {
       },
       {
         label: "最小化",
-        click: function() {
+        click: function () {
           const [win] = BrowserWindow.getAllWindows();
           win.hide();
         }
       },
       {
         label: "退出",
-        click: function() {
+        click: function () {
           app.quit();
         }
       }
