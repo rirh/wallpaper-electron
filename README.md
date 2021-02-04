@@ -18,15 +18,25 @@
 <br/>
 <br/>
 <a href="http://paper.tigerzh.com" target="_blank">
-      <img alt="mac"  src="./docs/home.png">
+      <img alt="mac" height="500px"  src="./docs/home.png">
 </a>
 <br/>
 <br/>
 <a href="http://paper.tigerzh.com" target="_blank">
-      <img alt="mac"  src="./docs/setting.png">
+      <img alt="mac"  height="500px"   src="./docs/setting.png">
 </a>
 <br/>
 <br/>
+<br/>
+<br/>
+<a href="http://paper.tigerzh.com" target="_blank">
+      <img alt="mac" height="500px"  src="./docs/win-home.jpg">
+</a>
+<br/>
+<br/>
+<a href="http://paper.tigerzh.com" target="_blank">
+      <img alt="mac" height="500px"  src="./docs/win-setting.jpg">
+</a>
 </p>
 
 ## config 
