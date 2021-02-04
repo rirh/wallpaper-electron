@@ -34,7 +34,7 @@
           <label for="start">随机切换壁纸</label>
         </div>
         <br />
-        <div>
+        <div class="no-drag">
           <select id="s" @change="handleChangeTime" v-model="selectedtime">
             <option
               label="每小时（网络随机下载）"

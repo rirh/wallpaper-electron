@@ -36,11 +36,8 @@ const pages = () => {
         width: 200,
         height: 300,
         maximizable:false,
-        
-        y: screen.getCursorScreenPoint().y / 2,
         show: false,
         transparent: true,
-        x: screen.getCursorScreenPoint().x / 2 - 282 / 2,
         frame: false,
         icon: path.join(__static, "icon.png")
       }
