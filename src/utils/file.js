@@ -104,7 +104,7 @@ export const downloadPic = async function(src, cb) {
               deleteDownLoadFile(dstpath);
               resolve(dstpath.replace("webp", "jpg"));
             } else {
-              reject();
+              reject('设置失败，请稍后重试！');
             }
           });
         } else {
@@ -112,7 +112,7 @@ export const downloadPic = async function(src, cb) {
         }
       } else {
         deleteDownLoadFile(dstpath);
-        reject();
+        reject('操作成功！');
       }
     });
   });

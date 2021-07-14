@@ -109,8 +109,14 @@ export default {
     }
   },
   mounted() {
-    this.fetchList();
+    window.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") {
+        this.fetchList();
+        this.auto_checkout();
+      }
+    });
     this.auto_checkout();
+    this.fetchList();
     window.ipcRenderer.on("reply-auto-change-image", () => {
       this.auto_checkout();
     });
@@ -120,7 +126,7 @@ export default {
       this.undowloading = true;
       if (data.state === "error") {
         new Notification("提示", {
-          body: "设置失败，请稍后重试！"
+          body: data.err
         });
       }
     });
@@ -140,11 +146,13 @@ export default {
     },
     handleReDowload() {
       window.ipcRenderer.send("sendCanelDowload");
-      this.handleSetWapper(
-        this.lists[this.currentImageIndex].loading,
-        this.lists[this.currentImageIndex].path,
-        this.currentImageIndex
-      );
+      this.$nextTick(() => {
+        this.handleSetWapper(
+          false,
+          this.lists[this.currentImageIndex].path,
+          this.currentImageIndex
+        );
+      });
     },
     handleGoAuth(item) {
       const { shell } = window.electron;

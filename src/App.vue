@@ -36,7 +36,7 @@
           <div class="title-item" @click="handleOpenSettingPage">
             <i class="icon el-icon-setting"></i>
           </div>
-           <div class="title-item" @click="handleMinApp">
+          <div class="title-item" @click="handleMinApp">
             <i class="icon el-icon-minus"></i>
           </div>
           <div class="close title-item" @click="handleCloseApp">
@@ -53,11 +53,11 @@ import { mapState } from "vuex";
 export default {
   computed: {
     ...mapState({
-      cursor: (state) => state.cursor,
+      cursor: state => state.cursor
     }),
     ismac() {
       return window.process.platform === "darwin";
-    },
+    }
   },
   methods: {
     handleMinApp() {
@@ -68,8 +68,8 @@ export default {
     },
     handleOpenSettingPage() {
       window.ipcRenderer.send("opensettingpage");
-    },
-  },
+    }
+  }
 };
 </script>
 

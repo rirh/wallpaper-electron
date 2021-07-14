@@ -2,7 +2,7 @@ let timer;
 onmessage = e => {
   const { url, is_random, selectedtime } = e.data;
   console.log(url, is_random, selectedtime);
-  const [type, time] = selectedtime.split("-");
+  const [type = "net", time = 36000] = selectedtime.split("-");
   if (time) clearTimeout(timer);
   timer = setTimeout(() => {
     if (type === "net") {
@@ -15,6 +15,7 @@ onmessage = e => {
 };
 
 function fetch_image(url, selectedtime) {
+  if (!url) return;
   const data = JSON.stringify({
     options: {
       method: "get",
@@ -31,7 +32,7 @@ function fetch_image(url, selectedtime) {
   xhr.withCredentials = true;
   xhr.addEventListener("readystatechange", function() {
     if (this.readyState === this.DONE) {
-      const data = JSON.parse(this.responseText);
+      const data = this.responseText && JSON.parse(this.responseText);
       data.largeImageURL && postMessage(data.largeImageURL);
     } else {
       setTimeout(() => {
