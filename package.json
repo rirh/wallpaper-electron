@@ -24,6 +24,7 @@
   "main": "background.js",
   "dependencies": {
     "auto-launch": "^5.0.5",
+    "caniuse-lite": "^1.0.30001245",
     "core-js": "^3.6.5",
     "electron-store": "^7.0.0",
     "electron-updater": "^4.3.5",

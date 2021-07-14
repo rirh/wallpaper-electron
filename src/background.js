@@ -1,5 +1,5 @@
 "use strict";
-import { app, protocol, BrowserWindow, globalShortcut } from "electron";
+import { app, protocol, BrowserWindow } from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import { autoUpdater } from "electron-updater";
 import pages from "./background.page";
@@ -42,12 +42,7 @@ app.on("ready", () => {
     createProtocol("app");
     autoUpdater.checkForUpdatesAndNotify();
   }
-  const ret = globalShortcut.register("CommandOrControl+w", () => {
-  });
-  if (!ret) {
-    console.log("registration failed");
-  }
-  // 检查快捷键是否注册成功  
+  // 检查快捷键是否注册成功
   proload_setting();
   proload_page();
   const tray = createTray();
@@ -63,13 +58,6 @@ app.on("ready", () => {
     }
   });
 });
-
-app.on('will-quit', () => {
-  // 注销快捷键
-  globalShortcut.unregister('CommandOrControl+w')
-  // 清空所有快捷键
-  globalShortcut.unregisterAll()
-})
 
 // Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {
