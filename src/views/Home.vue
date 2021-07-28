@@ -1,7 +1,7 @@
 <template>
   <ul class="home" @scroll="handleScroll">
     <li class="empty">&nbsp;</li>
-    <li class="image-item" v-for="(item, i) in lists" :key="item.id">
+    <li class="image-item" v-for="(item, i) in lists[cursor]" :key="item.id">
       <span
         class="setwapper"
         @click.stop="handleSetWapper(item.loading, item.urls.full, i)"
@@ -12,17 +12,15 @@
         ></i>
         设为桌面
       </span>
-      <el-avatar
+      <LazyAvatar :image="item.urls.small" />
+      <!-- <el-avatar
         fit="cover"
         class="avatar"
         :src="item.urls.small"
         shape="square"
         @error="errorHandler"
       >
-        <img
-          src="https://vkceyugu.cdn.bspapp.com/VKCEYUGU-aliyun-vou8sjcjysto19584c/62d8d820-48b9-11eb-a16f-5b3e54966275.png"
-        />
-      </el-avatar>
+      </el-avatar> -->
     </li>
     <li class="empty-tips" v-show="showmore">稍等一会,美好的事情即将发生...</li>
     <li v-show="undowloading">
@@ -60,6 +58,7 @@
 // @ is an alias to /src
 import { mapState } from "vuex";
 import store from "../electron-store";
+import LazyAvatar from "../components/LazyAvatar.vue";
 const checkwapper = new Worker("../worker/checkWapper.js", {
   type: "module"
 });
@@ -75,6 +74,9 @@ checkwapper.onmessage = function(e) {
 };
 export default {
   name: "Home",
+  components: {
+    LazyAvatar
+  },
   computed: {
     ...mapState({
       cursor: state => state.cursor
@@ -90,12 +92,14 @@ export default {
       current: "0",
       currentImageIndex: 0,
       url: "https://f794c6c4-6af8-4d74-b405-d93ed7968c0f.bspapp.com/http/wall?",
+      bgImage:
+        "https://vkceyugu.cdn.bspapp.com/VKCEYUGU-aliyun-vou8sjcjysto19584c/62d8d820-48b9-11eb-a16f-5b3e54966275.png",
       filterParams: {
         limit: 10,
         page: 1
       },
       showmore: true,
-      lists: [],
+      lists: {},
       timeoutcount: 0
     };
   },
@@ -105,6 +109,7 @@ export default {
         limit: 10,
         page: 1
       };
+
       this.fetchList();
     }
   },
@@ -149,7 +154,7 @@ export default {
       this.$nextTick(() => {
         this.handleSetWapper(
           false,
-          this.lists[this.currentImageIndex].path,
+          this.lists[this.cursor][this.currentImageIndex].path,
           this.currentImageIndex
         );
       });
@@ -181,19 +186,23 @@ export default {
       window.ipcRenderer.send("checkForUpdate");
     },
     fetchList() {
+      const cursor = this.cursor;
+      const url = `${this.url}`;
       this.loading = true;
       this.filterParams.order_by = this.cursor;
+      const body = JSON.stringify({
+        options: {
+          method: "get",
+          data: this.filterParams,
+          dataType: "json"
+        }
+      });
+
       // fetch(`${this.baseUri}${this.object2URL(this.filterParams)}`, {
       try {
-        fetch(`${this.url}`, {
+        fetch(url, {
           method: "POST",
-          body: JSON.stringify({
-            options: {
-              method: "get",
-              data: this.filterParams,
-              dataType: "json"
-            }
-          })
+          body: body
         })
           .then(async response => {
             const responses = await response.json();
@@ -205,13 +214,12 @@ export default {
             }
             this.timeoutcount = 0;
             this.response = responses;
-            console.log(responses);
             const lists = this.response.data.map(e => ({
               ...e,
               loading: false
             }));
             if (this.filterParams.page === 1) {
-              this.lists = lists;
+              this.lists[cursor] = lists;
               this.$nextTick(() => {
                 document.querySelector(".empty").scrollIntoView({
                   behavior: "smooth",
@@ -219,12 +227,16 @@ export default {
                 });
               });
             } else {
-              this.lists = [...this.lists, ...lists];
+              const list = [...this.lists[cursor], ...lists];
+              this.lists[cursor] = list;
             }
             this.loading = false;
           })
           .catch(err => {
             this.loading = false;
+            this.timeoutcount += 1;
+            if (this.timeoutcount >= 10) return;
+            this.fetchList();
             console.error(err);
           });
       } catch (error) {
@@ -235,8 +247,8 @@ export default {
       if (loading) return;
       if (!this.undowloading) {
         window.ipcRenderer.send("sendCanelDowload");
-        this.lists[this.currentImageIndex] = {
-          ...this.lists[this.currentImageIndex],
+        this.lists[this.cursor][this.currentImageIndex] = {
+          ...this.lists[this.cursor][this.currentImageIndex],
           loading: false
         };
       }
@@ -244,7 +256,10 @@ export default {
       this.currentImageIndex = i;
       this.total = null;
       this.current = null;
-      this.lists[i] = { ...this.lists[i], loading: true };
+      this.lists[this.cursor][i] = {
+        ...this.lists[this.cursor][i],
+        loading: true
+      };
       window.ipcRenderer.send("setpaper", { path, i });
     },
     handleCanelDowload() {
