@@ -12,7 +12,7 @@
         ></i>
         设为桌面
       </span>
-      <lazy-avatar :image="item.path" />
+      <lazy-avatar  :image="item.path"></lazy-avatar>
     </li>
     <li class="empty-tips" v-show="showmore">稍等一会,美好的事情即将发生...</li>
     <li v-show="undowloading">
@@ -64,7 +64,7 @@ checkwapper.onmessage = function(e) {
     window.ipcRenderer.send("auto-change-image-from-local");
   }
 };
-console.log(lazyAvatar)
+console.log(lazyAvatar);
 
 export default {
   name: "Home",
@@ -286,6 +286,7 @@ export default {
 };
 </script>
 <style>
+
 ul {
   padding: 0px;
   margin: 0px;

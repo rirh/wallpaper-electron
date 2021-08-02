@@ -114,13 +114,15 @@ export default {
   background-repeat: no-repeat;
   height: 55px;
   background-position: 40% 0%;
-  z-index: 1;
   border-bottom: 1px solid #0f131c;
   overflow: hidden;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 10px;
+  z-index: 1;
 }
 .setting {
   position: absolute;
-  right: 15px;
+  right: 14px;
   top: 20px;
   color: rgba(255, 255, 255, 0.6);
   font-size: 20px;

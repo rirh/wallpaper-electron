@@ -1,12 +1,13 @@
 <template lang="">
-  <el-avatar
-    fit="cover"
-    class="avatar"
-    ref="avatar"
-    :src="currentUrl"
-    shape="square"
-  >
-  </el-avatar>
+  <div>
+    <el-avatar
+      fit="cover"
+      class="avatar"
+      ref="avatar"
+      :src="currentUrl"
+      shape="square"
+    />
+  </div>
 </template>
 <script setup>
 import { onBeforeUnmount, onMounted, ref, defineProps, toRefs } from "vue";
@@ -24,7 +25,11 @@ onMounted(() => {
     if (entries[0].intersectionRatio <= 0) return;
     if (!currentUrl.value) currentUrl.value = image.value;
   });
-  if (avatar.value) intersectionObserver.value.observe(avatar.value.$el);
+  if (avatar.value) {
+    intersectionObserver.value.observe(avatar.value.$el);
+    const randomColor = "#" + ((Math.random() * 0xffffff) << 0).toString(16);
+    avatar.value.$el.style.backgroundColor = randomColor;
+  }
 });
 onBeforeUnmount(() => {
   intersectionObserver.value && intersectionObserver.value.disconnect();
@@ -35,7 +40,6 @@ onBeforeUnmount(() => {
 .avatar /deep/ img {
   height: 168px;
   width: 100%;
-  background-color: #fafafa;
   object-fit: cover;
 }
 </style>
