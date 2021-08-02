@@ -82,13 +82,13 @@ export default {
       start: false,
       is_random: false,
       path: "",
-      selectedtime: "",
+      selectedtime: ""
     };
   },
   computed: {
     ismac() {
       return window.process.platform === "darwin";
-    },
+    }
   },
   mounted() {
     const val = window.ipcRenderer.sendSync("update-auto-lunch-app", "");
@@ -105,17 +105,17 @@ export default {
     hand_select_file_dir() {
       window.remote.dialog
         .showOpenDialog({
-          properties: ["openDirectory"],
+          properties: ["openDirectory"]
         })
-        .then((result) => {
+        .then(result => {
           if (result.filePaths.length) {
             const [path] = result.filePaths;
             this.path = path;
             store.set("dowload-path", path);
           }
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(err => {
+          throw err;
         });
     },
     handle_update_random() {
@@ -138,8 +138,8 @@ export default {
       window.remote.shell.openExternal(
         "https://github.com/hiover/wallpaper-electron/issues"
       );
-    },
-  },
+    }
+  }
 };
 </script>
 

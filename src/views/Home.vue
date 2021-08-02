@@ -64,8 +64,6 @@ checkwapper.onmessage = function(e) {
     window.ipcRenderer.send("auto-change-image-from-local");
   }
 };
-console.log(lazyAvatar);
-
 export default {
   name: "Home",
   components: {
@@ -270,7 +268,6 @@ export default {
       };
     },
     load() {
-      console.log(1);
       this.filterParams.page = this.filterParams.page + 1;
       this.fetchList();
     },

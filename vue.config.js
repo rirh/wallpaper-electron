@@ -1,5 +1,4 @@
 const WorkerPlugin = require("worker-plugin");
-const now = Date.now();
 module.exports = {
   // 配置多页面
   pages: {
@@ -21,7 +20,7 @@ module.exports = {
       nodeIntegration: true,
       preload: "src/preload.js",
       builderOptions: {
-        productName: "WillPaper" + now,
+        productName: "WillPaper",
         appId: "com.wall.paper",
         publish: ["github"],
         dmg: {
