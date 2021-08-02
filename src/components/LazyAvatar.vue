@@ -1,5 +1,4 @@
 <template lang="">
-  <div>
     <el-avatar
       fit="cover"
       class="avatar"
@@ -7,14 +6,12 @@
       :src="currentUrl"
       shape="square"
     />
-  </div>
 </template>
 <script setup>
 import { onBeforeUnmount, onMounted, ref, defineProps, toRefs } from "vue";
 const props = defineProps({
   image: String
 });
-
 const intersectionObserver = ref({});
 const currentUrl = ref("");
 const avatar = ref(null);
