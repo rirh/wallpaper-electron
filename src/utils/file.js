@@ -58,9 +58,8 @@ export const downloadPic = async function(src, cb) {
     const psp = fileName.split("/");
     let lasname = psp[psp.length - 1];
     lasname = lasname.split("wallhaven").join("wallpaper");
-    let dstpath = `${hostdir}${
-      process.platform !== "darwin" ? "\\" : "/"
-    }${lasname}`;
+    const platfromPath = process.platform !== "darwin" ? "\\" : "/";
+    let dstpath = `${hostdir}${platfromPath}${lasname}`;
     let isWebp = false;
     // 如图图片已经下载完成了
     if (fs.existsSync(`${dstpath}`)) {
@@ -104,7 +103,7 @@ export const downloadPic = async function(src, cb) {
               deleteDownLoadFile(dstpath);
               resolve(dstpath.replace("webp", "jpg"));
             } else {
-              reject('设置失败，请稍后重试！');
+              reject("设置失败，请稍后重试！");
             }
           });
         } else {
@@ -112,7 +111,7 @@ export const downloadPic = async function(src, cb) {
         }
       } else {
         deleteDownLoadFile(dstpath);
-        reject('操作成功！');
+        reject("操作成功！");
       }
     });
   });

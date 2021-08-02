@@ -30,3 +30,12 @@ onBeforeUnmount(() => {
   intersectionObserver.value && intersectionObserver.value.disconnect();
 });
 </script>
+<style lang="less" scoped>
+.avatar,
+.avatar /deep/ img {
+  height: 168px;
+  width: 100%;
+  background-color: #fafafa;
+  object-fit: cover;
+}
+</style>

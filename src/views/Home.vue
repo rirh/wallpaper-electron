@@ -12,15 +12,7 @@
         ></i>
         设为桌面
       </span>
-      <LazyAvatar :image="item.urls.small" />
-      <!-- <el-avatar
-        fit="cover"
-        class="avatar"
-        :src="item.urls.small"
-        shape="square"
-        @error="errorHandler"
-      >
-      </el-avatar> -->
+      <lazy-avatar :image="item.path" />
     </li>
     <li class="empty-tips" v-show="showmore">稍等一会,美好的事情即将发生...</li>
     <li v-show="undowloading">
@@ -58,7 +50,7 @@
 // @ is an alias to /src
 import { mapState } from "vuex";
 import store from "../electron-store";
-import LazyAvatar from "../components/LazyAvatar.vue";
+import lazyAvatar from "@/components/LazyAvatar.vue";
 const checkwapper = new Worker("../worker/checkWapper.js", {
   type: "module"
 });
@@ -72,10 +64,12 @@ checkwapper.onmessage = function(e) {
     window.ipcRenderer.send("auto-change-image-from-local");
   }
 };
+console.log(lazyAvatar)
+
 export default {
   name: "Home",
   components: {
-    LazyAvatar
+    "lazy-avatar": lazyAvatar
   },
   computed: {
     ...mapState({
@@ -127,7 +121,10 @@ export default {
     });
     window.ipcRenderer.on("reply-setpaper", (event, data) => {
       const { i } = data;
-      this.lists[i] = { ...this.lists[i], loading: false };
+      this.lists[this.cursor][i] = {
+        ...this.lists[this.cursor][i],
+        loading: false
+      };
       this.undowloading = true;
       if (data.state === "error") {
         new Notification("提示", {
@@ -295,7 +292,7 @@ ul {
 }
 ul li {
   list-style: none;
-  padding: 0 5px;
+  padding: 0 2px;
   margin: 0px;
 }
 .home {
@@ -313,6 +310,7 @@ ul li {
 .image-item {
   position: relative;
   filter: brightness(85%);
+  height: 170px;
 }
 .image-item {
   position: relative;
@@ -334,7 +332,7 @@ ul li {
   border-radius: 20px;
   color: #eee;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 15px;
   user-select: none;
 }
 .auth {
@@ -368,11 +366,6 @@ ul li {
 .image-item:hover .auth {
   opacity: 1;
 }
-.avatar,
-.avatar > img {
-  height: 170px !important;
-  width: 100% !important;
-}
 
 * {
   -webkit-overflow-scrolling: touch;
@@ -403,8 +396,9 @@ ul li {
   color: #eee;
   padding: 15px 0 20px;
   text-align: left;
-  font-size: 12px;
+  font-size: 13px;
   cursor: pointer;
+  height: 15px;
 }
 .download i {
   margin: 0 12px;
